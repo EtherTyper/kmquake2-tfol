@@ -391,7 +391,7 @@ static void Sys_InitPrefDir (void)
 
 	if (pp == NULL)
 	{
-		Q_snprintfz(pref_dir, sizeof(pref_dir), "%s/.local/share/Daikatana", getenv("HOME"));
+		Q_snprintfz(pref_dir, sizeof(pref_dir), "%s/.local/share/TFOL", getenv("HOME"));
 		return;
 	}
 
