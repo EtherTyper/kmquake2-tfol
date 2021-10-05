@@ -33,11 +33,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 #include <GL/gl.h>
 
-#ifdef __linux__
-//#include <GL/fxmesa.h>
-#include <GL/glx.h>
-#endif
-
 qboolean QGL_Init( const char *dllname );
 void     QGL_Shutdown( void );
 
@@ -494,14 +489,6 @@ extern void (*qfxMesaMakeCurrent)(fxMesaContext ctx);
 extern fxMesaContext (*qfxMesaGetCurrentContext)(void);
 extern void (*qfxMesaSwapBuffers)(void);
 */
-
-//GLX Functions
-extern XVisualInfo * (*qglXChooseVisual)( Display *dpy, int screen, int *attribList );
-extern GLXContext (*qglXCreateContext)( Display *dpy, XVisualInfo *vis, GLXContext shareList, Bool direct );
-extern void (*qglXDestroyContext)( Display *dpy, GLXContext ctx );
-extern Bool (*qglXMakeCurrent)( Display *dpy, GLXDrawable drawable, GLXContext ctx);
-extern void (*qglXCopyContext)( Display *dpy, GLXContext src, GLXContext dst, GLuint mask );
-extern void (*qglXSwapBuffers)( Display *dpy, GLXDrawable drawable );
 
 // 3dfxSetPaletteEXT shunt
 void Fake_glColorTableEXT( GLenum target, GLenum internalformat,
