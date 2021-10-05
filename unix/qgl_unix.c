@@ -32,9 +32,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 #include <float.h>
 #include "../renderer/r_local.h"
-#include "glw_unix.h"
 
 #include <SDL.h>
+#include "glw_unix.h"
 
 #include <dlfcn.h>
 
@@ -2673,13 +2673,14 @@ static void APIENTRY logViewport(GLint x, GLint y, GLsizei width, GLsizei height
 */
 void QGL_Shutdown( void )
 {
-	if ( glw_state.OpenGLLib )
+	if ( glw_state.glContext )
 	{
-		dlclose ( glw_state.OpenGLLib );
-		glw_state.OpenGLLib = NULL;
+		SDL_GL_DeleteContext(glw_state.glContext);
+		SDL_DestroyWindow(glw_state.glWindow);
 	}
 
-	glw_state.OpenGLLib = NULL;
+	glw_state.glContext = NULL;
+	glw_state.glWindow = NULL;
 
 	qglAccum                     = NULL;
 	qglAlphaFunc                 = NULL;
@@ -3027,11 +3028,11 @@ void QGL_Shutdown( void )
 */
 }
 
-#define GPA( a ) dlsym( glw_state.OpenGLLib, a )
+#define GPA( a ) SDL_GL_GetProcAddress( a )
 
 void *qwglGetProcAddress(char *symbol)
 {
-	if (glw_state.OpenGLLib)
+	if (glw_state.glContext)
 		return GPA ( symbol );
 	return NULL;
 }
@@ -3061,23 +3062,18 @@ qboolean QGL_Init( const char *dllname )
 		putenv( envbuffer );
 	}
 
-	if ( ( glw_state.OpenGLLib = dlopen( dllname, RTLD_LAZY | RTLD_GLOBAL ) ) == 0 )
-	{
-		char	fn[MAX_OSPATH];
-		char	*path;
-		
-		path = Cvar_Get ("basedir", ".", CVAR_NOSET)->string;
-		snprintf (fn, MAX_OSPATH, "%s/%s", path, dllname );
-		
-		if ( ( glw_state.OpenGLLib = dlopen( fn, RTLD_LAZY ) ) == 0 ) {
-			Com_Printf( PRINT_ALL, "%s\n", dlerror() );
-			return false;
-		}
-	}
+	SDL_Init(SDL_INIT_VIDEO);
+	glw_state.glWindow = SDL_CreateWindow(
+		"Thirty Flights of Loving",
+		SDL_WINDOWPOS_CENTERED,
+		SDL_WINDOWPOS_CENTERED,
+		1280,
+		720,
+		SDL_WINDOW_OPENGL | SDL_WINDOW_HIDDEN
+	);
+	glw_state.glContext = SDL_GL_CreateContext(glw_state.glWindow);
 	
-#if 0
-	gl_config.allow_cds = true;
-#endif
+	glConfig.allowCDS = true;
 
 	qglAccum                     = dllAccum = GPA( "glAccum" );
 	qglAlphaFunc                 = dllAlphaFunc = GPA( "glAlphaFunc" );

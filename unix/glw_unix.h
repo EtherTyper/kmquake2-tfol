@@ -31,7 +31,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 typedef struct
 {
-	void *OpenGLLib; // instance of OpenGL library
+	SDL_Window *glWindow;
+	SDL_GLContext glContext;
 
 	FILE *log_fp;
 } glwstate_t;
