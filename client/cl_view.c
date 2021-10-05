@@ -40,7 +40,7 @@ cvar_t		*cl_testblend;
 
 cvar_t		*cl_stats;
 
-cvar_t		*hand;
+extern cvar_t		*hand;
 
 
 int			r_numdlights;
@@ -63,6 +63,11 @@ char		cl_weaponmodels[MAX_CLIENTWEAPONMODELS][MAX_QPATH];
 int			num_cl_weaponmodels;
 
 qboolean	v_initialized = false;		// ready to draw
+
+vec3_t clientOrg;
+qboolean loadingMessage;
+char loadingMessages[96];
+float loadingPercent;
 
 /*
 ====================

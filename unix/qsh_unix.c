@@ -41,13 +41,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 //===============================================================================
 
 byte *membase;
-int maxhunksize;
-int curhunksize;
+size_t maxhunksize;
+size_t curhunksize;
 
-void *Hunk_Begin (int maxsize)
+void *Hunk_Begin (size_t maxsize)
 {
 	// reserve a huge chunk of memory, but don't commit any yet
-	maxhunksize = maxsize + sizeof(int);
+	maxhunksize = maxsize + sizeof(size_t);
 	curhunksize = 0;
 
 #if (defined __FreeBSD__)
@@ -61,12 +61,12 @@ void *Hunk_Begin (int maxsize)
 	if (membase == NULL || membase == (byte *)-1)
 		Sys_Error("unable to virtual allocate %d bytes", maxsize);
 
-	*((int *)membase) = curhunksize;
+	*((size_t *)membase) = curhunksize;
 
-	return membase + sizeof(int);
+	return membase + sizeof(size_t);
 }
 
-void *Hunk_Alloc (int size)
+void *Hunk_Alloc (size_t size)
 {
 	byte *buf;
 
@@ -74,18 +74,18 @@ void *Hunk_Alloc (int size)
 	size = (size+31)&~31;
 	if (curhunksize + size > maxhunksize)
 		Sys_Error("Hunk_Alloc overflow");
-	buf = membase + sizeof(int) + curhunksize;
+	buf = membase + sizeof(size_t) + curhunksize;
 	curhunksize += size;
 	return buf;
 }
 
-int Hunk_End (void)
+size_t Hunk_End (void)
 {
 	byte *n;
 
 #if defined(__FreeBSD__)
   size_t old_size = maxhunksize;
-  size_t new_size = curhunksize + sizeof(int);
+  size_t new_size = curhunksize + sizeof(size_t);
   void * unmap_base;
   size_t unmap_len;
 
@@ -101,11 +101,11 @@ int Hunk_End (void)
   }
 #endif
 #if defined(__linux__)
-	n = mremap(membase, maxhunksize, curhunksize + sizeof(int), 0);
+	n = mremap(membase, maxhunksize, curhunksize + sizeof(size_t), 0);
 #endif
 	if (n != membase)
 		Sys_Error("Hunk_End:  Could not remap virtual block (%d)", errno);
-	*((int *)membase) = curhunksize + sizeof(int);
+	*((size_t *)membase) = curhunksize + sizeof(size_t);
 	
 	return curhunksize;
 }
@@ -115,8 +115,8 @@ void Hunk_Free (void *base)
 	byte *m;
 
 	if (base) {
-		m = ((byte *)base) - sizeof(int);
-		if (munmap(m, *((int *)m)))
+		m = ((byte *)base) - sizeof(size_t);
+		if (munmap(m, *((size_t *)m)))
 			Sys_Error("Hunk_Free: munmap failed (%d)", errno);
 	}
 }

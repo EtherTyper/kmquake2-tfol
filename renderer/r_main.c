@@ -80,13 +80,13 @@ cvar_t  *gl_driver;
 cvar_t	*gl_clear;
 
 // Psychospaz's console font size option
-cvar_t	*con_font_size;
+extern cvar_t	*con_font_size;
 cvar_t	*con_font;
 cvar_t	*scr_font;
 cvar_t	*ui_font;
-cvar_t	*alt_text_color;
+extern cvar_t	*alt_text_color;
 
-cvar_t	*scr_netgraph_pos;
+extern cvar_t	*scr_netgraph_pos;
 
 cvar_t	*r_norefresh;
 cvar_t	*r_drawentities;
@@ -195,7 +195,7 @@ cvar_t	*r_texturemode;
 //cvar_t	*r_texturesolidmode;
 cvar_t	*r_anisotropic;
 cvar_t	*r_anisotropic_avail;
-cvar_t	*r_font_upscale;
+extern cvar_t	*r_font_upscale;
 cvar_t	*r_scrap_upscale;
 cvar_t	*r_nvfog_dist;
 cvar_t	*r_nvfog_dist_mode;
@@ -203,9 +203,9 @@ cvar_t	*r_lockpvs;
 
 cvar_t	*r_3dlabs_broken;
 
-cvar_t	*vid_fullscreen;
-cvar_t	*vid_gamma;
-cvar_t	*vid_ref;
+extern cvar_t	*vid_fullscreen;
+extern cvar_t	*vid_gamma;
+extern cvar_t	*vid_ref;
 
 // Changable color for r_clearcolor (enabled by gl_clar)
 cvar_t	*r_clearcolor_r;

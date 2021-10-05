@@ -21,10 +21,9 @@ ARCH := $(shell uname -m | sed -e s/i.86/i386/ -e s/sun4u/sparc/ -e s/sparc64/sp
 ######################################
 
 BUILD_DATADIR=NO                # Use DATADIR to read (data, renderers, etc.) and ~/.quake2 to write.
-BUILD_GAME=YES                  # game$(ARCH).so
-BUILD_KMQUAKE2=YES              # kmquake executable (uses OSS for cdrom and sound)
-BUILD_KMQUAKE2_DEDICATED=YES	# build a dedicated kmquake2 server
-BUILD_KMQUAKE2_SDL=YES          # kmquake2-sdl executable (uses SDL for cdrom and sound)
+BUILD_GAME=NO                  # game$(ARCH).so
+BUILD_KMQUAKE2=YES              # kmquake executable (uses OSS for cdrom and sound TODO: SDL -flibit)
+BUILD_KMQUAKE2_DEDICATED=NO	# build a dedicated kmquake2 server
 BUILD_LIBDIR=NO                 # Use LIBDIR to read data and renderers (independent from DATADIR).
 
 ######################################
@@ -59,7 +58,7 @@ ifeq ($(OSTYPE),FreeBSD)
   LDFLAGS=-lm -lz
 endif
 ifeq ($(OSTYPE),Linux)
-  LDFLAGS=-lm -ldl -lz
+  LDFLAGS=-lm -ldl -lz -lminizip
 endif
 
 #Ogg Vorbis support
@@ -70,20 +69,14 @@ LDFLAGS += \
 
 #LOCALBASE?=/usr
 LOCALBASE?=/usr/local
-X11BASE?=/usr/X11R6
 PREFIX?=$(LOCALBASE)
 
 DATADIR?=$(LOCALBASE)/share/quake2
 LIBDIR?=$(LOCALBASE)/lib/kmquake2
 
-XCFLAGS=-I$(X11BASE)/include
-GLCFLAGS=-I$(LOCALBASE)/include -I$(X11BASE)/include
-GLXCFLAGS=-I$(LOCALBASE)/include -I$(X11BASE)/include -DOPENGL
-GLXLDFLAGS=-L$(LOCALBASE)/lib -L$(X11BASE)/lib -lX11 -lXext -lXxf86dga -lXxf86vm -lGL -lGLU -lpng -ljpeg
-
-SDL_CONFIG?=sdl-config
+SDL_CONFIG?=sdl2-config
 SDLCFLAGS=$(shell $(SDL_CONFIG) --cflags)
-SDLLDFLAGS=$(shell $(SDL_CONFIG) --libs)
+SDLLDFLAGS=$(shell $(SDL_CONFIG) --libs) -lpng -ljpeg -lcurl
 SDLGLCFLAGS=$(SDLCFLAGS) -DOPENGL
 SDLGLLDFLAGS=$(SDLLDFLAGS)
 
@@ -112,7 +105,7 @@ DO_CC=$(CC) $(CFLAGS) -I$(LOCALBASE)/include -o $@ -c $<
 DO_DED_CC=$(CC) $(CFLAGS) -DDEDICATED_ONLY -o $@ -c $<
 DO_DED_DEBUG_CC=$(CC) $(DEBUG_CFLAGS) -DDEDICATED_ONLY -o $@ -c $<
 DO_SHLIB_CC=$(CC) $(CFLAGS) $(SHLIBCFLAGS) -o $@ -c $<
-DO_GL_SHLIB_CC=$(CC) $(CFLAGS) $(SHLIBCFLAGS) $(GLCFLAGS) -o $@ -c $<
+DO_GL_SHLIB_CC=$(CC) $(CFLAGS) $(SHLIBCFLAGS) $(SDLGLCFLAGS) -o $@ -c $<
 DO_AS=$(CC) $(CFLAGS) -DELF -x assembler-with-cpp -o $@ -c $<
 DO_SHLIB_AS=$(CC) $(CFLAGS) $(SHLIBCFLAGS) -DELF -x assembler-with-cpp -o $@ -c $<
 
@@ -130,10 +123,6 @@ endif
 
 ifeq ($(strip $(BUILD_KMQUAKE2_DEDICATED)),YES)
  TARGETS += $(BINDIR)/kmquake2_netserver
-endif
-
-ifeq ($(strip $(BUILD_KMQUAKE2_SDL)),YES)
-  TARGETS+=$(BINDIR)/kmquake2-sdl
 endif
 
 ifeq ($(strip $(BUILD_GAME)),YES)
@@ -193,7 +182,7 @@ QUAKE2_OBJS = \
 	$(BUILDDIR)/client/cl_event.o \
 	$(BUILDDIR)/client/cl_http.o \
 	$(BUILDDIR)/client/cl_input.o \
-	$(BUILDDIR)/client/cl_inv.o \
+	$(BUILDDIR)/client/cl_hud.o \
 	$(BUILDDIR)/client/cl_keys.o \
 	$(BUILDDIR)/client/cl_lights.o \
 	$(BUILDDIR)/client/cl_loc.o \
@@ -295,32 +284,20 @@ QUAKE2_OBJS = \
 	$(BUILDDIR)/ref_gl/r_upscale.o \
 	$(BUILDDIR)/ref_gl/r_vlights.o \
 	$(BUILDDIR)/ref_gl/r_warp.o \
-	$(BUILDDIR)/ref_gl/gl_glx.o \
+	$(BUILDDIR)/ref_gl/gl_sdl.o \
 	\
-	$(BUILDDIR)/ref_gl/qgl_unix.o
+	$(BUILDDIR)/ref_gl/qgl_unix.o \
+	$(BUILDDIR)/client/cd_unix.o \
+	$(BUILDDIR)/client/snd_sdl.o
 	
 QUAKE2_AS_OBJS = \
 	$(BUILDDIR)/client/snd_mixa.o
-
-QUAKE2_LNX_OBJS = \
-	$(BUILDDIR)/client/cd_unix.o \
-	$(BUILDDIR)/client/snd_unix.o
-
-QUAKE2_SDL_OBJS = \
-	$(BUILDDIR)/client/cd_sdl.o \
-	$(BUILDDIR)/client/snd_sdl.o
 
 $(BINDIR)/kmquake2 : $(QUAKE2_OBJS) $(QUAKE2_AS_OBJS) $(QUAKE2_LNX_OBJS)
 	@echo
 	@echo "==================== Linking $@ ===================="
 	@echo
-	$(CC) $(CFLAGS) -o $@ $(QUAKE2_OBJS) $(QUAKE2_AS_OBJS) $(QUAKE2_LNX_OBJS) $(GLXLDFLAGS) $(LDFLAGS)
-
-$(BINDIR)/kmquake2-sdl : $(QUAKE2_OBJS) $(QUAKE2_AS_OBJS) $(QUAKE2_SDL_OBJS) 
-	@echo
-	@echo "==================== Linking $@ ===================="
-	@echo
-	$(CC) $(CFLAGS) -o $@ $(QUAKE2_OBJS) $(QUAKE2_AS_OBJS) $(QUAKE2_SDL_OBJS) $(GLXLDFLAGS) $(LDFLAGS) $(SDLLDFLAGS)
+	$(CC) $(CFLAGS) -o $@ $(QUAKE2_OBJS) $(QUAKE2_AS_OBJS) $(SDLLDFLAGS) $(LDFLAGS)
 
 $(BUILDDIR)/client/cl_cin.o :     	$(CLIENT_DIR)/cl_cin.c
 	$(DO_CC)
@@ -349,7 +326,7 @@ $(BUILDDIR)/client/cl_http.o :      	$(CLIENT_DIR)/cl_http.c
 $(BUILDDIR)/client/cl_input.o :   	$(CLIENT_DIR)/cl_input.c
 	$(DO_CC)
 
-$(BUILDDIR)/client/cl_inv.o :     	$(CLIENT_DIR)/cl_inv.c
+$(BUILDDIR)/client/cl_hud.o :     	$(CLIENT_DIR)/cl_hud.c
 	$(DO_CC)
 
 $(BUILDDIR)/client/cl_keys.o :       	$(CLIENT_DIR)/cl_keys.c
@@ -652,8 +629,8 @@ $(BUILDDIR)/ref_gl/r_vlights.o :       	$(REF_GL_DIR)/r_vlights.c
 $(BUILDDIR)/ref_gl/r_warp.o :        	$(REF_GL_DIR)/r_warp.c
 	$(DO_GL_SHLIB_CC)
 
-$(BUILDDIR)/ref_gl/gl_glx.o :      	$(UNIX_DIR)/gl_glx.c
-	$(DO_GL_SHLIB_CC) $(GLXCFLAGS)
+$(BUILDDIR)/ref_gl/gl_sdl.o :      	$(UNIX_DIR)/gl_sdl.c
+	$(DO_GL_SHLIB_CC) $(SDLCFLAGS)
 
 $(BUILDDIR)/ref_gl/qgl_unix.o :      	$(UNIX_DIR)/qgl_unix.c
 	$(DO_GL_SHLIB_CC)

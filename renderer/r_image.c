@@ -40,7 +40,7 @@ int			base_textureid;		// gltextures[i] = base_textureid+i
 static byte			 intensitytable[256];
 static unsigned char gammatable[256];
 
-cvar_t		*r_intensity;
+extern cvar_t		*r_intensity;
 
 unsigned	d_8to24table[256];
 float		d_8to24tablef[256][3]; //Knightmare- MrG's Vertex array stuff
@@ -1849,7 +1849,7 @@ GL_Upload32
 Returns has_alpha
 ===============
 */
-//#define USE_GLMIPMAP
+#define USE_GLMIPMAP
 qboolean GL_Upload32 (unsigned *data, int width, int height, imagetype_t type)
 {
 	unsigned 	*scaled = NULL;

@@ -26,6 +26,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 #ifdef _WIN32
 #include "../win32/winquake.h"
+#else
+#include <ctype.h>
 #endif
 
 vec2_t vec2_origin = {0,0};
@@ -315,7 +317,7 @@ __declspec( naked ) int Q_ftol( float f )
 	__asm ret
 }
 #pragma warning (default:4035)
-#else
+#elif !defined(Q_ftol)
 int Q_ftol( float f )
 {
 	return (int)f;

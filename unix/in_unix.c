@@ -139,7 +139,7 @@ void IN_Move (usercmd_t *cmd)
 		if (ui_mousecursor.x > viddef.width) ui_mousecursor.x = viddef.width;
 		if (ui_mousecursor.y < 0) ui_mousecursor.y = 0;
 		if (ui_mousecursor.y > viddef.height) ui_mousecursor.y = viddef.height;
-		M_Think_MouseCursor();
+		// FIXME flibit M_Think_MouseCursor();
 	}
 
 	// psychospaz - zooming in preserves sensitivity

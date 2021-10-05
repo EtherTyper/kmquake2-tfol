@@ -29,6 +29,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #include "../client/client.h"
 #include "ui_local.h"
 
+int MainMenuMouseHover;
+
 static int	m_main_cursor;
 
 // for checking if quad cursor model is available
