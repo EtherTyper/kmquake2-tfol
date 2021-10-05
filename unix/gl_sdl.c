@@ -38,7 +38,7 @@ void UpdateGammaRamp(void)
 
 char *Sys_GetClipboardData(void)
 {
-	return NULL;
+	return SDL_GetClipboardText();
 }
 
 void IN_Activate(qboolean active)
