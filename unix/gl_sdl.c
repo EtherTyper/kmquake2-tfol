@@ -166,13 +166,13 @@ void HandleEvents(void)
 			if (mouse_active)
 			{
 				/* Relative should be on here */
-				mx += evt.motion.x;
-				my += evt.motion.y;
+				mx += evt.motion.xrel;
+				my += evt.motion.yrel;
 			}
 		}
 		else if (evt.type == SDL_MOUSEBUTTONDOWN)
 		{
-			int mouse_button = evt.button.button;
+			int mouse_button = evt.button.button - 1;
 			if (mouse_button == 1)
 			{
 				mouse_button = 2;
