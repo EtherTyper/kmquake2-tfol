@@ -245,7 +245,9 @@ void SV_Multicast (vec3_t origin, multicast_t to)
 		if (reliable)
 			SZ_Write (&client->netchan.message, sv.multicast.data, sv.multicast.cursize);
 		else
+		{
 			// FIXME flibit: SZ_Write (&client->datagram, sv.multicast.data, sv.multicast.cursize);
+		}
 	}
 
 	SZ_Clear (&sv.multicast);
