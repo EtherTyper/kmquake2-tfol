@@ -23,6 +23,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 // r_misc.c - particle image loading, and screenshots
 
 #include "r_local.h"
+
+#ifdef _WIN32
 #include "../include/jpeg/jpeglib.h" // Heffo - JPEG Screenshots
 #ifdef PNG_SUPPORT
 #if defined (_MSC_VER) && (_MSC_VER <= 1200)	// use older version of libpng for MSVC6
@@ -31,6 +33,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #include "../include/zlibpng/png.h"
 #endif
 #endif	// PNG_SUPPORT
+#else // _WIN32
+#include <jpeglib.h>
+#ifdef PNG_SUPPORT
+#include <png.h>
+#endif
+#endif // _WIN32
 
 
 /*
