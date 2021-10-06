@@ -42,7 +42,8 @@ int GLimp_SetMode(int *pwidth, int *pheight, int mode, dispType_t fullscreen)
 		return rserr_invalid_mode;
 	}
 
-	/* TODO -flibit */
+	SDL_SetWindowSize(glw_state.glWindow, width, height);
+	/* TODO: mode, faux-backbuffer */
 
 	*pwidth = width;
 	*pheight = height;
@@ -137,6 +138,10 @@ static int SDLToQuake(SDL_Keycode key)
 		if (key >= SDLK_0 && key <= SDLK_9)
 		{
 			return '0' + (key - SDLK_1);
+		}
+		if (key == SDLK_BACKQUOTE)
+		{
+			return key; /* ??? */
 		}
 		return 0;
 	};
