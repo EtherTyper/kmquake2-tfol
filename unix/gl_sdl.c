@@ -135,7 +135,10 @@ static int SDLToQuake(SDL_Keycode key)
 				return 'A' + (key - SDLK_a);
 			}
 		}
-		return key;
+		if (key < 128)
+		{
+			return key;
+		}
 	};
 	#undef KEY
 }
