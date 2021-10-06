@@ -31,9 +31,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #else // _WIN32
 #include <minizip/unzip.h>
 #include <minizip/zip.h>
-#ifndef Z_DEFAULT_COMPRESSION
-#define Z_DEFAULT_COMPRESSION (-1)
-#endif
 #endif // _WIN32
 
 #define BASEDIRNAME				"baseq2"
