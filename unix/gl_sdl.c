@@ -89,6 +89,7 @@ static int SDLToQuake(SDL_Keycode key)
 		case SDLK_##sdl: return K_##quake;
 	switch(key)
 	{
+	KEY(SPACE, SPACE)
 	KEY(PAGEUP, PGUP)
 	KEY(PAGEDOWN, PGDN)
 	KEY(HOME, HOME)
@@ -133,17 +134,8 @@ static int SDLToQuake(SDL_Keycode key)
 			{
 				return 'A' + (key - SDLK_a);
 			}
-			return 'a' + (key - SDLK_a);
 		}
-		if (key >= SDLK_0 && key <= SDLK_9)
-		{
-			return '0' + (key - SDLK_1);
-		}
-		if (key == SDLK_BACKQUOTE)
-		{
-			return key; /* ??? */
-		}
-		return 0;
+		return key;
 	};
 	#undef KEY
 }
