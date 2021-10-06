@@ -1087,6 +1087,11 @@ void CL_RailTrail (vec3_t start, vec3_t end, int red, int green, int blue);
 void CL_BubbleTrail (vec3_t start, vec3_t end);
 void CL_FlagTrail (vec3_t start, vec3_t end, qboolean isred, qboolean isgreen);
 void CL_IonripperTrail (vec3_t start, vec3_t end); // RAFAEL
+//BC
+void CL_LavaParticles (vec3_t org, vec3_t dir, int count, int red, int green, int blue, int reddelta, int greendelta, int bluedelta);
+void CL_HeartParticles (vec3_t org, vec3_t dir, int count, int red, int green, int blue, int reddelta, int greendelta, int bluedelta);
+void CL_MusicParticles (vec3_t org, vec3_t dir, int count, int red, int green, int blue, int reddelta, int greendelta, int bluedelta);
+void CL_WaterfallParticles (vec3_t org, vec3_t dir, int count, int red, int green, int blue, int reddelta, int greendelta, int bluedelta);
 // ========
 // PGM
 void CL_DebugTrail (vec3_t start, vec3_t end);

@@ -917,6 +917,85 @@ void CL_ParseTEnt (void)
 		S_StartSound (pos2, 0, 0, clMedia.sfx_railg, 1, ATTN_NORM, 0);
 		break;
 
+//BC
+	case TE_SHRED:
+
+		MSG_ReadPos (&net_message, pos);
+		MSG_ReadDir (&net_message, dir);
+
+		CL_shred (pos, dir, 32,
+			255,255,255,
+			0,0, 0); // was 40
+
+		break;
+
+	case TE_LOBBYGLASS:
+
+		MSG_ReadPos (&net_message, pos);
+		MSG_ReadDir (&net_message, dir);
+
+		CL_lobbyglass (pos, dir, 48,
+			255,255,255,
+			0,0, 0); // was 40
+
+		break;
+
+	case TE_BURPGAS:
+		//bc
+		MSG_ReadPos (&net_message, pos);
+		MSG_ReadDir (&net_message, dir);
+
+		CL_burpgas (pos, dir, 1,
+			100,190,190,
+			190,0, 0); // was 40
+
+
+
+
+
+		break;
+	case TE_CIGSMOKE:
+		//bc
+		MSG_ReadPos (&net_message, pos);
+		MSG_ReadDir (&net_message, dir);
+
+		CL_cigsmoke (pos, dir, 1, 100,
+			190,190, 190,
+			0, 0,0); // was 40
+
+		break;
+	case TE_CIGBIGSMOKE:
+		//bc
+		MSG_ReadPos (&net_message, pos);
+		MSG_ReadDir (&net_message, dir);
+
+		CL_cigbigsmoke (pos, dir, 1, 100,
+			190,190, 190,
+			0, 0,0); // was 40
+
+		break;
+	case TE_WINEGLASSBREAK:
+		MSG_ReadPos (&net_message, pos);
+		MSG_ReadDir (&net_message, dir);
+
+		CL_wineglassbreak (pos, dir, 32, 255,
+			255,255,
+			0,
+			0, 0,0); // was 40
+
+		break;
+	case TE_BLOODCOUGH:
+		MSG_ReadPos (&net_message, pos);
+		MSG_ReadDir (&net_message, dir);
+
+		CL_bloodcough (pos, dir,  32, 255,
+			255,255,
+			0,
+			0, 0, 0); // was 40
+
+		break;
+//BC end
+
 	case TE_EXPLOSION2:
 	case TE_GRENADE_EXPLOSION:
 	case TE_GRENADE_EXPLOSION_WATER:
@@ -1016,6 +1095,7 @@ void CL_ParseTEnt (void)
 
 	case TE_EXPLOSION1_NP:						// PMM
 		MSG_ReadPos (&net_message, pos);
+#if 0  //bc waterfall fx.
 	//	if (cl_old_explosions->value)
 		if (cl_old_explosions->integer)
 		{
@@ -1040,6 +1120,10 @@ void CL_ParseTEnt (void)
 		}
 		CL_Explosion_Sparks (pos, 10, 128);
 		S_StartSound (pos, 0, 0, clMedia.sfx_grenexp, 1, ATTN_NORM, 0);
+#else
+		VectorSet(dir, 0, 0, 0);
+		CL_WaterfallParticles (pos, dir, 64, 190, 170, 255, 0, 0, 0);
+#endif
 		break;
 
 	case TE_EXPLOSION1:
@@ -1254,7 +1338,11 @@ void CL_ParseTEnt (void)
 				CL_BlasterParticles (pos, dir, numparts, partsize, 235, 50, 50, 0, -90, -30);
 				red=235; green=50; blue=50; }
 			else if (type == TE_FLECHETTE) {
+#if 0 //bc lava
  				CL_BlasterParticles (pos, dir, numparts, partsize, 100, 100, 195, -10, 0, -10);
+#else
+				CL_LavaParticles (pos, dir, numparts, 255, 50, 10, 0, 0, 0);
+#endif
 				red=100; green=100; blue=195; }
 			else { // TE_BLASTER
 				CL_BlasterParticles (pos, dir, numparts, partsize, 255, 150, 50, 0, -90, -30); // was 40
@@ -1318,7 +1406,13 @@ void CL_ParseTEnt (void)
 		break;
 
 	case TE_HEATBEAM:
+#if 0 //BC music notes.
 		ent = CL_ParsePlayerBeam (clMedia.mod_heatbeam);
+#else
+		MSG_ReadPos (&net_message, pos);
+		VectorSet(dir, 0, 0, 0);
+		CL_MusicParticles (pos, dir, 64, 255, 255, 255, 0, 0, 0);
+#endif
 		break;
 
 	case TE_MONSTER_HEATBEAM:
@@ -1326,6 +1420,7 @@ void CL_ParseTEnt (void)
 		break;
 
 	case TE_HEATBEAM_SPARKS:
+#if 0 //bc hearts
 		cnt = 50;
 		MSG_ReadPos (&net_message, pos);
 		MSG_ReadDir (&net_message, dir);
@@ -1333,6 +1428,11 @@ void CL_ParseTEnt (void)
 		magnitude = 60;
 		CL_ParticleSteamEffect (pos, dir, 240, 240, 240, -20, -20, -20, cnt, magnitude);
 		S_StartSound (pos,  0, 0, clMedia.sfx_lashit, 1, ATTN_NORM, 0);
+#else
+		MSG_ReadPos (&net_message, pos);
+		MSG_ReadDir (&net_message, dir);
+		CL_HeartParticles (pos, dir, 64, 255, 255, 255, 0, 0, 0);
+#endif
 		break;
 	
 	case TE_HEATBEAM_STEAM:
