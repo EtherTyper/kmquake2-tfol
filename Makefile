@@ -57,18 +57,15 @@ UNIX_DIR=$(MOUNT_DIR)/unix
 GAME_DIR=$(MOUNT_DIR)/game
 NULL_DIR=$(MOUNT_DIR)/null
 
+#Ogg Vorbis support
+LDFLAGS+=-lvorbisfile
+
 ifeq ($(OSTYPE),FreeBSD)
-  LDFLAGS=-lm -lz
+  LDFLAGS+=-lm -lz
 endif
 ifeq ($(OSTYPE),Linux)
-  LDFLAGS=-lm -lz -lminizip
+  LDFLAGS+=-lm -lz -lminizip
 endif
-
-#Ogg Vorbis support
-LDFLAGS += \
-	-lvorbisfile \
-	-lvorbis \
-	-logg 
 
 #LOCALBASE?=/usr
 LOCALBASE?=/usr/local
@@ -79,7 +76,7 @@ LIBDIR?=$(LOCALBASE)/lib/kmquake2
 
 SDL_CONFIG?=sdl2-config
 SDLCFLAGS=$(shell $(SDL_CONFIG) --cflags)
-SDLLDFLAGS=$(shell $(SDL_CONFIG) --libs) -lpng -ljpeg -lcurl
+SDLLDFLAGS=$(shell $(SDL_CONFIG) --libs) -lpng -ljpeg
 SDLGLCFLAGS=$(SDLCFLAGS) -DOPENGL
 SDLGLLDFLAGS=$(SDLLDFLAGS)
 
@@ -841,7 +838,7 @@ GAME_OBJS = \
 	$(BUILDDIR)/game/q_shared.o
 	
 $(BINDIR)/baseq2/kmq2game$(ARCH).$(SHLIBEXT) : $(GAME_OBJS)
-	$(CC) $(CFLAGS) $(SHLIBLDFLAGS) -o $@ $(GAME_OBJS) -lGL
+	$(CC) $(CFLAGS) $(SHLIBLDFLAGS) -o $@ $(GAME_OBJS)
 
 $(BUILDDIR)/game/acebot_ai.o :          $(GAME_DIR)/acebot_ai.c
 	$(DO_SHLIB_CC)

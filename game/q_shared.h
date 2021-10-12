@@ -155,7 +155,9 @@ __inline int Q_vsnprintf (char *Dest, size_t Count, const char *Format, va_list 
 #define PNG_SUPPORT // whether to include PNG image support
 #define LOC_SUPPORT	// whether to include loc file support
 
+#ifdef NOTTHIRTYFLIGHTS
 #define USE_CURL	// whether to include HTTP downloading
+#endif
 
 #define MD2_AS_MD3 // whether to load md2s into md3 memory representation
 
