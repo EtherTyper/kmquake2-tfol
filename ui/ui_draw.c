@@ -225,6 +225,10 @@ void UI_DrawBanner (char *name)
 	int		w, h;
 
 	R_DrawGetPicSize (&w, &h, name );
+#ifndef NOTTHIRTYFLIGHTS
+	w *= 0.6;
+	h *= 0.6;
+#endif
 	UI_DrawPic (SCREEN_WIDTH/2 - w/2, SCREEN_HEIGHT/2 - 150, w, h, ALIGN_CENTER, false, name, 1.0);
 }
 
@@ -234,7 +238,7 @@ void UI_DrawBanner (char *name)
 UI_Draw_Cursor
 =================
 */
-#if 1
+#ifdef NOTTHIRTYFLIGHTS
 void UI_Draw_Cursor (void)
 {
 //	int		w, h;
@@ -250,6 +254,80 @@ void UI_Draw_Cursor (void)
 	R_DrawScaledPic (ui_mousecursor.x - ofs_x, ui_mousecursor.y - ofs_y, scale, 1.0f, cur_img);
 */
 	SCR_DrawScaledPic (ui_mousecursor.x, ui_mousecursor.y, scale, true, false, cur_img, 1.0f);
+}
+#elif 1
+void UI_Draw_Cursor (void)
+{
+	float alpha = 1, scale = SCR_ScaledVideo(1)*0.5;
+	int w,h;
+	char *overlay = NULL;
+	char *cur_img = NULL;
+
+	if (m_drawfunc == M_Main_Draw)
+	{
+		if (MainMenuMouseHover)
+		{
+			if ((cursor.buttonused[0] && cursor.buttonclicks[0])
+				|| (cursor.buttonused[1] && cursor.buttonclicks[1]))
+			{
+				cur_img = "/gfx/m_cur_click.pcx";
+				alpha = 0.85 + 0.15*sin(anglemod(cl.time*0.005));
+			}
+			else
+			{
+				cur_img = "/gfx/m_cur_hover.pcx";
+				alpha = 0.85 + 0.15*sin(anglemod(cl.time*0.005));
+			}
+		}
+		else
+			cur_img = "/gfx/m_cur_main.pcx";
+
+		//overlay = "/gfx/m_cur_over.pcx";
+	}
+	else
+	{
+		if (cursor.menuitem)
+		{
+			if (cursor.menuitemtype == MENUITEM_TEXT)
+			{
+				cur_img = "/gfx/m_cur_text.pcx";
+			}
+			else
+			{
+				if ((cursor.buttonused[0] && cursor.buttonclicks[0])
+					|| (cursor.buttonused[1] && cursor.buttonclicks[1]))
+				{
+					cur_img = "/gfx/m_cur_click.pcx";
+					alpha = 0.85 + 0.15*sin(anglemod(cl.time*0.005));
+				}
+				else
+				{
+					cur_img = "/gfx/m_cur_hover.pcx";
+					alpha = 0.85 + 0.15*sin(anglemod(cl.time*0.005));
+				}
+				//overlay = "/gfx/m_cur_over.pcx";
+			}
+		}
+		else
+		{
+			cur_img = "/gfx/m_cur_main.pcx";
+			//overlay = "/gfx/m_cur_over.pcx";
+		}
+	}
+	
+	if (cur_img)
+	{
+		R_DrawGetPicSize( &w, &h, cur_img );
+		R_DrawScaledPic( cursor.x - scale*w/2, cursor.y - scale*h/2, scale, 1.0, cur_img);
+
+		/*
+		if (overlay)
+		{
+			R_DrawGetPicSize( &w, &h, overlay );
+			R_DrawScaledPic( cursor.x - scale*w/2, cursor.y - scale*h/2, scale, 1, overlay);
+		}
+		*/
+	}
 }
 #else
 void UI_Draw_Cursor (void)

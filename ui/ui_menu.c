@@ -629,11 +629,35 @@ const char *UI_DefaultMenuKey (menuframework_s *m, int key)
 	case K_AUX31:
 	case K_AUX32:
 		
+#ifndef NOTTHIRTYFLIGHTS
+	case K_SPACE:
+#endif
 	case K_KP_ENTER:
 	case K_ENTER:
+#ifdef NOTTHIRTYFLIGHTS
 		if ( m )
 			UI_SelectMenuItem (m);
 		sound = ui_menu_move_sound;
+#else
+		if ( m )
+		{
+			if ( item->type == MTYPE_CHECKBOX )
+			{
+				
+				Menu_SlideItem( m, 1 );
+				sound = menu_click;
+			}
+			else 
+			{
+				
+				Menu_SelectItem( m );
+
+				if ( item->type == MTYPE_ACTION )
+					sound = menu_move_sound;
+				
+			}
+		}
+#endif
 		break;
 	}
 

@@ -170,7 +170,11 @@ void Menu_LoadGame_Init (void)
 
 		s_loadgame_actions[i].generic.x = 0;
 		s_loadgame_actions[i].generic.y = (i) * MENU_LINE_SIZE;
+#ifdef NOTTHIRTYFLIGHTS
 		if (i>0)	// separate from autosave
+#else
+		if (i>1)	// separate from autosave
+#endif
 			s_loadgame_actions[i].generic.y += 10;
 
 		s_loadgame_actions[i].generic.type = MTYPE_ACTION;
@@ -184,7 +188,11 @@ void Menu_LoadGame_Init (void)
 	s_loadgame_back_action.generic.flags	= QMF_LEFT_JUSTIFY;
 	s_loadgame_back_action.generic.x		= 0;
 	s_loadgame_back_action.generic.y		= (UI_MAX_SAVEGAMES+3)*MENU_LINE_SIZE;
+#ifdef NOTTHIRTYFLIGHTS
 	s_loadgame_back_action.generic.name		= "Back";
+#else
+	s_loadgame_back_action.generic.name		= "CANCEL";
+#endif
 	s_loadgame_back_action.generic.callback = UI_BackMenu;
 
 	UI_AddMenuItem (&s_loadgame_menu, &s_loadgame_back_action);
@@ -249,10 +257,19 @@ void Menu_SaveGame_Init (void)
 //	Load_Savestrings ();
 
 	// don't include the autosave slot
+#ifdef NOTTHIRTYFLIGHTS
 	for ( i = 0; i < UI_MAX_SAVEGAMES-1; i++ )
+#else
+	for ( i = 0; i < UI_MAX_SAVEGAMES-2; i++ )
+#endif
 	{
+#ifdef NOTTHIRTYFLIGHTS
 		s_savegame_actions[i].generic.name = ui_savestrings[i+1];
 		s_savegame_actions[i].generic.localdata[0] = i+1;
+#else
+		s_savegame_actions[i].generic.name = ui_savestrings[i+2];
+		s_savegame_actions[i].generic.localdata[0] = i+2;
+#endif
 		s_savegame_actions[i].generic.flags = QMF_LEFT_JUSTIFY;
 		s_savegame_actions[i].generic.callback = SaveGameCallback;
 
@@ -268,8 +285,13 @@ void Menu_SaveGame_Init (void)
 	s_savegame_back_action.generic.textSize	= MENU_FONT_SIZE;
 	s_savegame_back_action.generic.flags  = QMF_LEFT_JUSTIFY;
 	s_savegame_back_action.generic.x		= 0;
+#ifdef NOTTHIRTYFLIGHTS
 	s_savegame_back_action.generic.y		= (UI_MAX_SAVEGAMES+1)*MENU_LINE_SIZE;
 	s_savegame_back_action.generic.name		= "Back";
+#else
+	s_savegame_back_action.generic.y		= (UI_MAX_SAVEGAMES+2)*MENU_LINE_SIZE;
+	s_savegame_back_action.generic.name		= "CANCEL";
+#endif
 	s_savegame_back_action.generic.callback = UI_BackMenu;
 
 	UI_AddMenuItem (&s_savegame_menu, &s_savegame_back_action);

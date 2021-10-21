@@ -175,10 +175,14 @@ int UI_MouseOverAlpha (menucommon_s *m)
 	{
 		int alpha;
 
+#ifdef NOTTHIRTYFLIGHTS
 		alpha = 125 + 25 * cos(anglemod(cl.time*0.005));
 
 		if (alpha>255) alpha = 255;
 		if (alpha<0) alpha = 0;
+#else
+		alpha = 255;
+#endif
 
 		return alpha;
 	}

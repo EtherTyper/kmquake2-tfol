@@ -45,6 +45,14 @@ static menuaction_s		s_options_effects_section;
 static menuaction_s		s_options_interface_section;
 static menuaction_s		s_options_back_action;
 
+#ifndef NOTTHIRTYFLIGHTS
+static menuaction_s		s_options_video_section;
+
+static menuframework_s		s_dialogue_menu;
+static menuaction_s		s_dialogue_text_section;
+static menuaction_s		s_dialogue_ok_section
+#endif
+
 //=======================================================================
 
 static void M_MenuSoundFunc (void *unused)
@@ -130,25 +138,56 @@ void Menu_Options_Init (void)
 	s_options_back_action.generic.type		= MTYPE_ACTION;
 	s_options_back_action.generic.textSize	= MENU_HEADER_FONT_SIZE;
 	s_options_back_action.generic.flags		= QMF_LEFT_JUSTIFY;
+#ifdef NOTTHIRTYFLIGHTS
 	s_options_back_action.generic.name		= "Back to Main";
+#else
+	s_options_back_action.generic.name		= "Cancel";
+#endif
 	s_options_back_action.generic.x			= x;
 	s_options_back_action.generic.y			= y += 3*MENU_HEADER_LINE_SIZE;	// MENU_FONT_SIZE * 13
 	s_options_back_action.generic.callback	= UI_BackMenu;
 
+#ifndef NOTTHIRTYFLIGHTS
+	s_options_video_section.generic.type		= MTYPE_ACTION;
+	s_options_video_section.generic.flags		= QMF_LEFT_JUSTIFY;
+	s_options_video_section.generic.name		= "Display";
+	s_options_video_section.generic.x		= 0; //MENU_FONT_SIZE*0.5*strlen(s_options_sound_section.generic.name);
+	s_options_video_section.generic.y		= MENU_FONT_SIZE * 6;
+	s_options_video_section.generic.callback	= M_Menu_Video_f;
+#endif
+
 	UI_AddMenuItem (&s_options_menu,	(void *) &s_options_sound_section);
 	UI_AddMenuItem (&s_options_menu,	(void *) &s_options_controls_section);
+#ifdef NOTTHIRTYFLIGHTS
 	UI_AddMenuItem (&s_options_menu,	(void *) &s_options_screen_section);
 	UI_AddMenuItem (&s_options_menu,	(void *) &s_options_effects_section);
+#else
+	UI_AddMenuItem (&s_options_menu,	(void *) &s_options_video_section);
+#endif
 	UI_AddMenuItem (&s_options_menu,	(void *) &s_options_interface_section);
 	UI_AddMenuItem (&s_options_menu,	(void *) &s_options_back_action);
 }
 
 void Menu_Options_Draw (void)
 {
+#ifndef NOTTHIRTYFLIGHTS
+	menucommon_s *citem;
+#endif
+
 	UI_DrawBanner ("m_banner_options");
 
 	UI_AdjustMenuCursor (&s_options_menu, 1);
 	UI_DrawMenu (&s_options_menu);
+
+#ifndef NOTTHIRTYFLIGHTS
+	citem = Menu_ItemAtCursor( &s_options_menu );
+	if ( citem )
+	{
+		char	name[16];
+		Com_sprintf (name, sizeof(name), "c_%s", citem->name);
+		icondraw( name );
+	}
+#endif
 }
 
 const char *Menu_Options_Key (int key)
