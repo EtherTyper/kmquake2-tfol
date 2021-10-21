@@ -364,7 +364,7 @@ sfxcache_t *S_LoadSound (sfx_t *s)
 	}*/
 	if (info.channels < 1 || info.channels > 2)	//CDawg changed
 	{
-		Com_Printf ("%s has an invalid number of channels\n", s->name);
+		Com_Printf ("%s has an invalid number of channels. Channels: %d\n", s->name, info.channels);
 		FS_FreeFile (data);
 		return NULL;
 	}

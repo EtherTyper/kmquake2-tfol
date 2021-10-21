@@ -127,7 +127,11 @@ void CL_RegisterTEntSounds (void)
 	// shockwave impact
 	clMedia.sfx_shockhit = S_RegisterSound ("weapons/shockhit.wav");
 
+#ifdef NOTTHIRTYFLIGHTS
 	for (i=0 ; i<4 ; i++) {
+#else
+	for (i=0 ; i<3 ; i++) {
+#endif
 		Com_sprintf (name, sizeof(name), "player/step%i.wav", i+1);
 		clMedia.sfx_footsteps[i] = S_RegisterSound (name);
 	}
@@ -232,10 +236,18 @@ CL_RegisterTEntModels
 */
 void CL_RegisterTEntModels (void)
 {
+#ifdef NOTTHIRTYFLIGHTS
 	clMedia.mod_explode = R_RegisterModel ("models/objects/explode/tris.md2");
+#else
+	clMedia.mod_explode = R_RegisterModel ("models/objects/fan/tris.md2");
+#endif
 	clMedia.mod_smoke = R_RegisterModel ("models/objects/smoke/tris.md2");
 	clMedia.mod_flash = R_RegisterModel ("models/objects/flash/tris.md2");
+#ifdef NOTTHIRTYFLIGHTS
 	clMedia.mod_parasite_segment = R_RegisterModel ("models/monsters/parasite/segment/tris.md2");
+#else
+	clMedia.mod_parasite_segment = R_RegisterModel ("models/objects/chain/tris.md2");
+#endif
 	clMedia.mod_grapple_cable = R_RegisterModel ("models/ctf/segment/tris.md2");
 	clMedia.mod_parasite_tip = R_RegisterModel ("models/monsters/parasite/tip/tris.md2");
 	clMedia.mod_explo = R_RegisterModel ("models/objects/r_explode/tris.md2");
@@ -917,6 +929,75 @@ void CL_ParseTEnt (void)
 		S_StartSound (pos2, 0, 0, clMedia.sfx_railg, 1, ATTN_NORM, 0);
 		break;
 
+#ifndef NOTTHIRTYFLIGHTS
+	case TE_SHRED:
+
+		MSG_ReadPos (&net_message, pos);
+		MSG_ReadDir (&net_message, dir);
+
+		CL_shred (pos, dir, 32,
+			255,255,255,
+			0,0, 0); // was 40
+
+		break;
+
+	case TE_LOBBYGLASS:
+
+		MSG_ReadPos (&net_message, pos);
+		MSG_ReadDir (&net_message, dir);
+
+		CL_lobbyglass (pos, dir, 48,
+			255,255,255,
+			0,0, 0); // was 40
+
+		break;
+
+	case TE_BURPGAS:
+		//bc
+		MSG_ReadPos (&net_message, pos);
+		MSG_ReadDir (&net_message, dir);
+
+		CL_burpgas (pos, dir, 1,
+			100,190,190,
+			190,0, 0); // was 40
+
+
+
+
+
+		break;
+	case TE_CIGSMOKE:
+		//bc
+		MSG_ReadPos (&net_message, pos);
+		MSG_ReadDir (&net_message, dir);
+
+		CL_cigsmoke (pos, dir, 1, 100,
+			190,190, 190,
+			0, 0,0); // was 40
+
+		break;
+	case TE_CIGBIGSMOKE:
+		//bc
+		MSG_ReadPos (&net_message, pos);
+		MSG_ReadDir (&net_message, dir);
+
+		CL_cigbigsmoke (pos, dir, 1, 100,
+			190,190, 190,
+			0, 0,0); // was 40
+
+		break;
+	case TE_WINEGLASSBREAK:
+		MSG_ReadPos (&net_message, pos);
+		MSG_ReadDir (&net_message, dir);
+
+		CL_wineglassbreak (pos, dir, 32, 255,
+			255,255,
+			0,
+			0, 0,0); // was 40
+
+		break;
+#endif
+
 	case TE_EXPLOSION2:
 	case TE_GRENADE_EXPLOSION:
 	case TE_GRENADE_EXPLOSION_WATER:
@@ -1015,6 +1096,7 @@ void CL_ParseTEnt (void)
 		break;
 
 	case TE_EXPLOSION1_NP:						// PMM
+#ifdef NOTTHIRTYFLIGHTS
 		MSG_ReadPos (&net_message, pos);
 	//	if (cl_old_explosions->value)
 		if (cl_old_explosions->integer)
@@ -1040,6 +1122,15 @@ void CL_ParseTEnt (void)
 		}
 		CL_Explosion_Sparks (pos, 10, 128);
 		S_StartSound (pos, 0, 0, clMedia.sfx_grenexp, 1, ATTN_NORM, 0);
+#else
+		MSG_ReadPos (&net_message, pos);
+		//MSG_ReadDir (&net_message, dir);
+
+		
+		VectorSet(dir, 0, 0, 0);
+
+ 		CL_WaterfallParticles (pos, dir, 64, 190, 170, 255, 0, 0, 0);
+#endif
 		break;
 
 	case TE_EXPLOSION1:
@@ -1168,11 +1259,40 @@ void CL_ParseTEnt (void)
 		CL_ParticleEffect3 (pos, dir, color, cnt);
 		break;
 
+#ifndef NOTTHIRTYFLIGHTS
+	case TE_FREONHIT:
+		MSG_ReadPos (&net_message, pos);
+		MSG_ReadDir (&net_message, dir);
+
+
+		CL_ParticleBlasterDecal(pos, dir, 7, 100,230,250);
+
+		CL_FreonParticles (pos, dir, 1, 100,230,250, 0, -90, -30); // was 40
+
+		
+
+		
+
+
+		break;
+#endif
 //=============
 //PGM
 	// PMM -following code integrated for flechette (different color)
 	case TE_BLASTER:			// blaster hitting wall
 	case TE_BLASTER2:			// green blaster hitting wall
+#ifndef NOTTHIRTYFLIGHTS
+		MSG_ReadPos (&net_message, pos);
+		MSG_ReadDir (&net_message, dir);
+
+		if (pos)
+		{
+			vec3_t color = { 64, 64, 64 };
+			CL_ParticleEffectSparks (pos, dir, color, 4);
+		}
+
+		break;
+#endif
 	case TE_BLUEHYPERBLASTER:	// blue blaster hitting wall
 	case TE_REDBLASTER:			// red blaster hitting wall
 	case TE_FLECHETTE:			// flechette hitting wall
@@ -1254,14 +1374,23 @@ void CL_ParseTEnt (void)
 				CL_BlasterParticles (pos, dir, numparts, partsize, 235, 50, 50, 0, -90, -30);
 				red=235; green=50; blue=50; }
 			else if (type == TE_FLECHETTE) {
+#ifdef NOTTHIRTYFLIGHTS
  				CL_BlasterParticles (pos, dir, numparts, partsize, 100, 100, 195, -10, 0, -10);
+#else
+				CL_LavaParticles (pos, dir, numparts, 255, 50, 10, 0, 0, 0);
+#endif
 				red=100; green=100; blue=195; }
 			else { // TE_BLASTER
 				CL_BlasterParticles (pos, dir, numparts, partsize, 255, 150, 50, 0, -90, -30); // was 40
 				red=255; green=150; blue=50; }
+#ifndef NOTTHIRTYFLIGHTS
+			if (type != TE_FLECHETTE)
+#endif
 			CL_ParticleBlasterDecal(pos, dir, 10, red, green, blue);
 		}
+#ifdef NOTTHIRTYFLIGHTS
 		S_StartSound (pos,  0, 0, clMedia.sfx_lashit, 1, ATTN_NORM, 0);
+#endif
 		break;
 
 	// shockwave impact effect
@@ -1318,7 +1447,14 @@ void CL_ParseTEnt (void)
 		break;
 
 	case TE_HEATBEAM:
+#ifdef NOTTHIRTYFLIGHTS
 		ent = CL_ParsePlayerBeam (clMedia.mod_heatbeam);
+#else
+		//BC music notes.
+		MSG_ReadPos (&net_message, pos);
+		VectorSet(dir, 0, 0, 0);
+ 		CL_MusicParticles (pos, dir, 64, 255, 255, 255, 0, 0, 0);
+#endif
 		break;
 
 	case TE_MONSTER_HEATBEAM:
@@ -1326,6 +1462,7 @@ void CL_ParseTEnt (void)
 		break;
 
 	case TE_HEATBEAM_SPARKS:
+#ifdef NOTTHIRTYFLIGHTS
 		cnt = 50;
 		MSG_ReadPos (&net_message, pos);
 		MSG_ReadDir (&net_message, dir);
@@ -1333,6 +1470,12 @@ void CL_ParseTEnt (void)
 		magnitude = 60;
 		CL_ParticleSteamEffect (pos, dir, 240, 240, 240, -20, -20, -20, cnt, magnitude);
 		S_StartSound (pos,  0, 0, clMedia.sfx_lashit, 1, ATTN_NORM, 0);
+#else
+		//bc hearts
+		MSG_ReadPos (&net_message, pos);
+		MSG_ReadDir (&net_message, dir);
+ 		CL_HeartParticles (pos, dir, 64, 255, 255, 255, 0, 0, 0);
+#endif
 		break;
 	
 	case TE_HEATBEAM_STEAM:
@@ -1376,7 +1519,11 @@ void CL_ParseTEnt (void)
 		MSG_ReadPos (&net_message, pos);
 		MSG_ReadDir (&net_message, dir);
 	// new blue electric sparks
+#ifdef NOTTHIRTYFLIGHTS
 		CL_ElectricParticles (pos, dir, 40);
+#else
+		CL_ElectricParticles (pos, dir, 70);
+#endif
 		//FIXME : replace or remove this sound
 		S_StartSound (pos, 0, 0, clMedia.sfx_lashit, 1, ATTN_NORM, 0);
 		break;
@@ -1408,6 +1555,18 @@ void CL_ParseTEnt (void)
 		MSG_ReadPos (&net_message, pos);
 		CL_WidowSplash (pos);
 		break;
+#ifndef NOTTHIRTYFLIGHTS
+	case TE_BLOODCOUGH:
+		MSG_ReadPos (&net_message, pos);
+		MSG_ReadDir (&net_message, dir);
+
+		CL_bloodcough (pos, dir,  32, 255,
+			255,255,
+			0,
+			0, 0, 0); // was 40
+
+		break;
+#endif
 //PGM
 //==============
 
@@ -1588,7 +1747,11 @@ void CL_AddBeams (void)
 			{
 				ent.angles[0] = pitch;
 				ent.angles[1] = yaw;
+#ifdef NOTTHIRTYFLIGHTS
 				ent.angles[2] = rand()%360;
+#else
+				ent.angles[2] = 24*sin(anglemod(cl.time*0.0015));
+#endif
 			}
 			//AnglesToAxis(ent.angles, ent.axis);
 

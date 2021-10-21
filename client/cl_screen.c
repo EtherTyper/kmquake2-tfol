@@ -1687,7 +1687,11 @@ void SCR_Init (void)
 
 	crosshair = Cvar_Get ("crosshair", "1", CVAR_ARCHIVE);
 	Cvar_SetDescription ("crosshair", "Sets crosshair image.  0 = no crosshair");
+#ifdef NOTTHIRTYFLIGHTS
 	crosshair_scale = Cvar_Get ("crosshair_scale", "1", CVAR_ARCHIVE);
+#else
+	crosshair_scale = Cvar_Get ("crosshair_scale", "0.5", CVAR_ARCHIVE);
+#endif
 	Cvar_SetDescription ("crosshair_scale", "Sets crosshair size.  Min = 0.25, Max = 15.");
 	crosshair_alpha = Cvar_Get ("crosshair_alpha", "1", CVAR_ARCHIVE);
 	Cvar_SetDescription ("crosshair_alpha", "Sets base opacity of crosshair.");
@@ -1757,6 +1761,38 @@ void SCR_Shutdown (void)
 }
 
 
+char *SCR_FindKey (char *key)
+{
+	static char	mapmsg[16];
+	int			k;
+	qboolean	found_bind=false;
+
+	for (k=0 ; k<256 ; k++)
+	{
+		if (keybindings[k] && keybindings[k][0])
+		{						
+			if (!Q_stricmp(keybindings[k], key))
+			{							
+				Com_sprintf (mapmsg, sizeof(mapmsg), "%s", Key_KeynumToString(k));
+				found_bind = true;
+			}
+		}
+	}
+
+	if (!found_bind)
+	{
+		//no key bound to action. Give you question marks!
+		Com_sprintf (mapmsg, sizeof(mapmsg), "^1?");
+	}
+
+	if (mapmsg)
+	{
+		//return the final result:					
+		return mapmsg;		
+	}
+}
+
+
 /*
 =================
 SCR_DrawCrosshair
@@ -1769,6 +1805,7 @@ Moved from cl_view.c, what the hell was it doing there?
 // Psychospaz's new crosshair code
 void SCR_DrawCrosshair (void)
 {	
+#ifdef NOTTHIRTYFLIGHTS
 	float	scaledSize, alpha, pulsealpha;
 
 	if ( !crosshair->integer || cl_zoommode->integer || scr_hidehud )
@@ -1800,6 +1837,118 @@ void SCR_DrawCrosshair (void)
 	alpha = max(min(crosshair_alpha->value - pulsealpha + pulsealpha*sin(anglemod(cl.time*0.005)), 1.0), 0.0);
 	SCR_DrawPic ( ((float)SCREEN_WIDTH - scaledSize)*0.5, ((float)SCREEN_HEIGHT - scaledSize)*0.5,
 					scaledSize, scaledSize, ALIGN_CENTER, false, crosshair_pic, alpha);
+#else
+	float scale;
+	float alpha;
+
+
+
+	if (cl.frame.playerstate.stats[STAT_HINTTITLE] > 0)
+		alpha = 0;
+	else
+		alpha = 1;
+
+	//DOn't draw xhair if player is dead!
+	if ((!crosshair->value) || (cl.frame.playerstate.stats[STAT_HEALTH] <= 0) || (cl.frame.playerstate.stats[STAT_HUDMSG] == 1) ||  (cl.frame.playerstate.stats[STAT_SELECTED_ITEM] == 12))
+		return;
+
+
+
+
+	if (crosshair->modified)
+	{
+		crosshair->modified = false;
+		SCR_TouchPics ();
+
+		if (!strcmp("dday",Cvar_Get ("game", "0", CVAR_ARCHIVE)->string)) //dday has no crosshair (FORCED)
+			Cvar_SetValue("crosshair", 0);
+	}
+
+	if (crosshair_scale->modified)
+	{
+		crosshair_scale->modified=false;
+		if (crosshair_scale->value>5)
+			Cvar_SetValue("crosshair_scale", 5);
+		else if (crosshair_scale->value<0.25)
+			Cvar_SetValue("crosshair_scale", 0.25);
+	}
+
+	if (!crosshair_pic[0])
+		return;
+
+	scale = crosshair_scale->value * (viddef.width*DIV640);
+
+	
+	if (cl.frame.playerstate.stats[STAT_USEABLE] < 1)
+	{
+		R_DrawScaledPic (scr_vrect.x + ((scr_vrect.width - scale*crosshair_width)/2), // width
+			scr_vrect.y + ((scr_vrect.height - scale*crosshair_height)/2),	// height
+			scale,	// scale
+			alpha,
+			//0.75 + 0.25*sin(anglemod(cl.time*0.005)),	// alpha
+			crosshair_pic); // pic
+	}
+	else
+	{
+		int x,y;
+		const char *keymsg;
+
+		x = scr_vrect.width * 0.035f;
+		y = scr_vrect.height * 0.08f;
+
+		R_DrawStretchPic ((scr_vrect.width * 0.5f)-(x*0.5f), (scr_vrect.height * 0.5f)-(y*0.5f), x, y, "/gfx/m_cur_hover.tga", 1.0);
+
+
+		
+		/*
+		x = scr_vrect.width * 0.03f;
+		
+		R_DrawStretchPic (
+			(scr_vrect.width * 0.5f)-(x*0.5f),
+			(scr_vrect.height * 0.52f)-(y*0.5f),
+			x, x,
+			"/pics/letter_e.tga", 1.0);
+		*/
+
+				
+		
+		keymsg = SCR_FindKey("+use",true);
+
+		//Com_Printf ("%s\n",keymsg);				
+
+		if (keymsg)				
+		{
+			/*
+			if (!strcmp(keymsg, "MOUSE2"))
+			{
+				x = scr_vrect.width * 0.03f;
+
+				R_DrawStretchPic (
+					scr_vrect.width * 0.49f,
+					scr_vrect.height * 0.535f,
+					x, x,
+					"/pics/letter_mouse2.tga", 1.0);
+			}
+			else*/ if (!strcmp(keymsg, "e"))
+			{
+				Com_sprintf (keymsg, sizeof(keymsg), "E");
+
+				Menu_DrawString(
+					318,
+					257, 
+					keymsg, 255);
+			}
+			else
+			{
+				Menu_DrawString(
+					318,
+					257, 
+					keymsg, 255);
+			}
+
+		}
+	}
+#endif
 }
 
 
@@ -1874,9 +2023,15 @@ void SCR_DrawPause (void)
 	if (cls.key_dest == key_menu)
 		return;
 
+#ifdef NOTTHIRTYFLIGHTS
 //	R_DrawGetPicSize (&w, &h, "pause");
 //	SCR_DrawPic ((SCREEN_WIDTH-w)*0.5, (SCREEN_HEIGHT-h)*0.5, w, h, ALIGN_CENTER, "pause", 1.0);
 	SCR_DrawPic (x, y, w, h, ALIGN_CENTER, false, "pause", 1.0);
+#else
+	w*= 0.5;
+	h*= 0.5;
+	SCR_DrawPic ((SCREEN_WIDTH-w)*0.5, (SCREEN_HEIGHT-h) * 0.8, w, h, ALIGN_CENTER, "pause", 1.0);
+#endif
 }
 
 
@@ -1916,12 +2071,23 @@ void SCR_DrawLoadingBar (float x, float y, float w, float h, int percent, float 
 	float	iRatio, hiRatio;
 
 	// changeable download/map load bar color
+#ifdef NOTTHIRTYFLIGHTS
 //	CL_TextColor ((int)alt_text_color->value, &red, &green, &blue);
 	CL_TextColor (alt_text_color->integer, &red, &green, &blue);
+#else
+	//hardcode loadbar color
+	red = 224;
+	green = 0;
+	blue = 0;
+#endif
 	iRatio = 1 - fabs(sizeRatio);
 	hiRatio = iRatio * 0.5;
 
+#ifdef NOTTHIRTYFLIGHTS
 	SCR_DrawFill (x, y, w, h, ALIGN_STRETCH, false, 255, 255, 255, 90);
+#else
+	SCR_DrawFill (x, y, w, h, ALIGN_STRETCH, false, 255, 255, 255, 48);
+#endif
 
 	if (percent != 0)
 		SCR_DrawFill (x+(h*hiRatio), y+(h*hiRatio), (w-(h*iRatio))*percent*0.01, h*sizeRatio,
@@ -2007,6 +2173,7 @@ void SCR_DrawLoading (void)
 			SCR_DrawPic (0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, ALIGN_CENTER, false, va("/levelshots/%s.pcx", mapfile), 1.0); // was ALIGN_STRETCH
 			haveMapPic = true;
 		}
+#ifdef NOTTHIRTYFLIGHTS
 		// else fall back on loadscreen
 		else if (R_DrawFindPic(LOADSCREEN_NAME)) {
 			SCR_DrawFill (0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, ALIGN_STRETCH_ALL, false, 0, 0, 0, 255);
@@ -2014,18 +2181,47 @@ void SCR_DrawLoading (void)
 			SCR_GetPicPosWidth (LOADSCREEN_NAME, &picX, &picW);
 			SCR_DrawPic (picX, 0, picW, SCREEN_HEIGHT, ALIGN_CENTER, false, LOADSCREEN_NAME, 1.0);
 		}
+#else
+		else if (R_DrawFindPic("/gfx/loadscreen.pcx"))
+		{
+			SCR_DrawFill2 (0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, ALIGN_STRETCH, 255, 255, 255, 255);
+
+			//BC 45PRM LP LOADING SCREEN
+			
+			/*SCR_DrawPic (140, 20,
+				440, 440,
+				ALIGN_STRETCH,
+				"/gfx/loadscreen.pcx", 1.0);			*/
+
+			R_DrawStretchPic (
+				(viddef.width / 2) - (viddef.height/2),
+				0,
+				viddef.height,
+				viddef.height,
+				"/gfx/loadscreen.pcx",
+				1.0);
+
+
+			SCR_DrawPic (0, 0,
+				SCREEN_WIDTH, SCREEN_HEIGHT,
+				ALIGN_STRETCH,
+				"/pics/vignette.tga", 1.0);
+		}
+#endif
 		// else draw black screen
 		else
 			SCR_DrawFill (0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, ALIGN_STRETCH_ALL, false, 0, 0, 0, 255);
 
 		isMap = true;
 	}
+#ifdef NOTTHIRTYFLIGHTS
 	else if (R_DrawFindPic(LOADSCREEN_NAME)) {
 		SCR_DrawFill (0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, ALIGN_STRETCH_ALL, false, 0, 0, 0, 255);
 	//	SCR_DrawPic (0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, ALIGN_STRETCH, LOADSCREEN_NAME, 1.0);
 		SCR_GetPicPosWidth (LOADSCREEN_NAME, &picX, &picW);
 		SCR_DrawPic (picX, 0, picW, SCREEN_HEIGHT, ALIGN_CENTER, false, LOADSCREEN_NAME, 1.0);
 	}
+#endif
 	else
 		SCR_DrawFill (0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, ALIGN_STRETCH_ALL, false, 0, 0, 0, 255);
 
@@ -2066,7 +2262,9 @@ void SCR_DrawLoading (void)
 							SCREEN_HEIGHT*0.5 + MENU_FONT_SIZE*6, MENU_FONT_SIZE, ALIGN_CENTER, loadMsg, FONT_SCREEN, 255);
 
 			SCR_DrawLoadingBar (SCREEN_WIDTH*0.5 - 180, SCREEN_HEIGHT*0.5 + 60, 360, 24, cls.downloadpercent, 0.75);
+#ifdef NOTTHIRTYFLIGHTS
 			SCR_DrawAlertMessagePicture("downloading", false, -plaqueOffset);
+#endif
 		}
 	}
 	// Loading message stuff && loading bar...
@@ -2085,6 +2283,7 @@ void SCR_DrawLoading (void)
 		else
 			plaqueOffset = 0;
 
+#ifdef NOTTHIRTYFLIGHTS
 		if (drawMapName) {
 			loadMsg = va(S_COLOR_SHADOW S_COLOR_WHITE"Loading Map ["S_COLOR_ALT"%s"S_COLOR_WHITE"]", cl.configstrings[CS_NAME]);
 			SCR_DrawString (SCREEN_WIDTH*0.5 - MENU_FONT_SIZE*stringLen(loadMsg)*0.5,
@@ -2102,13 +2301,20 @@ void SCR_DrawLoading (void)
 			SCR_DrawLoadingBar (SCREEN_WIDTH*0.5 - 180, SCREEN_HEIGHT - 20, 360, 15, (int)cls.loadingPercent, 0.6);
 			SCR_DrawAlertMessagePicture("loading", false, plaqueOffset);
 		}
+#else
+		SCR_DrawLoadingBar (SCREEN_WIDTH /2 - (170/2), SCREEN_HEIGHT - 95,
+			170, 10,
+			(int)loadingPercent, 0.6);
+#endif
 	}
+#ifdef NOTTHIRTYFLIGHTS
 	else {// just a plain old loading plaque
 		if (simplePlaque)
 			SCR_DrawLoadingTagProgress ("loading_bar", 0, (int)cls.loadingPercent);
 		else
 			SCR_DrawAlertMessagePicture("loading", true, 0);
 	}
+#endif
 }
 
 //=============================================================================

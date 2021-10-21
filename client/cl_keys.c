@@ -967,6 +967,10 @@ void Key_Event (int key, qboolean down, unsigned time)
 	{
 		if (!down)
 			return;
+#ifndef NOTTHIRTYFLIGHTS
+		else if (!cl_enableconsole->value && !cls.consoleActive)
+			return;
+#endif
 		Con_ToggleConsole_f ();
 		return;
 	}

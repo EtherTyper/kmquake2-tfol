@@ -24,6 +24,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 typedef enum
 {
+#ifdef NOTTHIRTYFLIGHTS
 	particle_solid = 1,
 	particle_generic,
 	particle_inferno,
@@ -63,6 +64,53 @@ typedef enum
 	particle_bulletmark,
 	particle_trackermark,
 //	particle_footprint,
+#else
+	particle_generic,
+	particle_freongeneric,
+	particle_smoke,
+	particle_blood,
+	particle_blooddrop,
+	particle_blooddrip,
+	particle_redblood,
+	particle_bubble,
+	particle_blaster,
+	particle_beam,
+	particle_beam2,
+	particle_lightning,
+	particle_lensflare,
+	particle_lightflare,
+	particle_inferno,
+	particle_shield,
+	particle_rflash,
+	particle_rexplosion1,
+	particle_rexplosion2,
+	particle_rexplosion3,
+	particle_rexplosion4,
+	particle_rexplosion5,
+	particle_rexplosion6,
+	particle_rexplosion7,
+	particle_dexplosion1,
+	particle_dexplosion2,
+	particle_dexplosion3,
+	particle_bulletmark,
+	particle_shadow,
+	particle_burnmark,
+	particle_blooddecal1,
+	particle_blooddecal2,
+	particle_blooddecal3,
+	particle_blooddecal4,
+	particle_blooddecal5,
+	particle_footprint,
+	particle_glass,
+	particle_glass2,
+	particle_music1,
+	particle_music2,
+	particle_music3,
+	particle_heart,
+	particle_shred0,
+	particle_shred1,
+	particle_shred2
+#endif
 } particle_type;
 
 #define  GL_ZERO						0x0

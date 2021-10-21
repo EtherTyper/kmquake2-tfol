@@ -306,12 +306,19 @@ void CL_ExecuteLayoutString (char *s, qboolean isStatusBar)
 	float			(*getScreenScale)(void);
 	float			scrLeft, scrWidth;
 
+#ifndef NOTTHIRTYFLIGHTS
+	int		selected;
+	int		num,selected_num,i;
+	int w, h;
+#endif
+
 	if (cls.state != ca_active || !cl.refresh_prepped)
 		return;
 
 	if (!s[0])
 		return;
 
+#ifdef NOTTHIRTYFLIGHTS
 	// Knightmare- hack for connected to server using old protocol
 	// Changed config strings require different parsing
 	if ( LegacyProtocol() ) {
@@ -332,6 +339,270 @@ void CL_ExecuteLayoutString (char *s, qboolean isStatusBar)
 		scaleForScreen = SCR_ScaledScreen;
 		getScreenScale = SCR_GetScreenScale;
 	}
+#else
+	//FULLSCREEN VIGNETTE EFFECT
+	R_DrawStretchPic (
+		0,
+		0,
+		viddef.width,
+		viddef.height,
+		"/pics/vignette.pcx",
+		0.8);
+
+
+	value = cl.frame.playerstate.stats[STAT_HINTTITLE];
+
+    if (value > 0)
+	{
+		//R_DrawScaledPic (viddef.width/2 - scaledHud(180), viddef.height/2 - scaledHud(45), HudScale() * 0.7, value * 0.01, "hint_title");
+		//int title;
+
+		//GravityBone hack. Make the GravityBone title appear if we're in a GB map.
+		char	mapfile[32];
+
+		if (cl.configstrings[CS_MODELS+1][0])
+		{
+			strcpy (mapfile, cl.configstrings[CS_MODELS+1] + 5);	// skip "maps/"
+			mapfile[strlen(mapfile)-4] = 0;		// cut off ".bsp"
+		}
+
+		if (Q_stricmp( mapfile, "parlo1") == 0) //name of GB map.
+		{
+			R_DrawScaledPic (viddef.width/2 - scaledHud(180), viddef.height/2 - scaledHud(45), HudScale() * 0.7, value * 0.01, "hint_title");	//GB image
+		}
+		else
+		{
+			R_DrawScaledPic (
+				viddef.width - 512 - 64,
+				viddef.height/2 - 256,
+				1,
+				value * 0.01,
+				"title");
+
+			R_DrawScaledPic (
+				viddef.width/2 - 256,
+				viddef.height - 148,
+				1,
+				value * 0.01,
+				"copyright");
+		}
+	}
+
+
+	//terrible hack. the last drawn thing gets corrupted for some reason. so this is a little dummy picture.
+		R_DrawStretchPic (
+		0,
+		0,
+		1,
+		1,
+		"/pics/ch1.pcx",
+		0);
+
+	
+
+	
+
+
+	value = cl.frame.playerstate.stats[STAT_HUDMSG];
+
+    if (value == 1)
+	{
+		/*
+		R_DrawStretchPic (
+		0,
+		0,
+		viddef.width,
+		viddef.height,
+		"/pics/drunk.png",
+		0.6);
+*/
+
+		
+
+
+			R_DrawScaledPic (
+				viddef.width/2 - scaledHud(240),
+				viddef.height/2 - scaledHud(16),
+				HudScale() * 0.5,
+				1.0,
+				"contractcomplete");
+
+	}
+	else if (value == 2)
+	{
+		R_DrawScaledPic (
+			scaledHud(1),
+			viddef.height - scaledHud(64),
+			HudScale() * 0.35,
+			1.0,
+			"find_exit");
+	}
+	else if (value == 3)
+	{
+		//TFOL "the end"
+		R_DrawScaledPic (
+			viddef.width - scaledHud(128),
+			viddef.height - scaledHud(128),
+			HudScale() * 0.8,
+			1.0,
+			"drunk");
+	}
+
+	
+
+	//selected = cl.frame.playerstate.stats[STAT_SELECTED_ITEM];
+	//Com_Printf ("%i\n",cl.frame.playerstate.stats[STAT_SELECTED_ITEM]);
+
+
+	//===== draw camera viewfinder.
+	if (cl.frame.playerstate.stats[STAT_SELECTED_ITEM])
+	{
+		if (cl.frame.playerstate.stats[STAT_SELECTED_ITEM] == 12)
+		{
+			R_DrawStretchPic (
+				0,
+				0,
+				viddef.width,
+				viddef.height,
+				"/pics/viewfinder.tga",
+				1.0);
+
+
+			if (cl.frame.playerstate.stats[STAT_PHOTOCOUNT])
+			{
+				char pcount[32];
+				sprintf(pcount, "%d of %d Photos", cl.frame.playerstate.stats[STAT_PHOTOCOUNT], cl.frame.playerstate.stats[STAT_MAXPHOTOS]);
+
+				//cl.frame.playerstate.stats[STAT_PHOTOCOUNT]
+				Hud_DrawString (scaledHud(270), scaledHud(465), pcount, 255);
+			}
+		}
+	}
+
+
+	//Com_Printf ("%i\n",cl.frame.playerstate.stats[STAT_SELECTED_ITEM]);
+
+	if (cl.frame.playerstate.stats[STAT_WEAPBOX] > 0)
+	{
+		float adj=1.0;
+	
+
+		selected = cl.frame.playerstate.stats[STAT_SELECTED_ITEM];
+		num = 0;
+		selected_num = 0;
+		
+
+
+		if (cl.frame.playerstate.stats[STAT_WEAPBOX] < 20)
+		{
+			adj = 0.05 * cl.frame.playerstate.stats[STAT_WEAPBOX];
+			
+		}
+
+		for (i=0; i<MAX_ITEMS; i++)
+		{
+			float alpha;
+			float boxalpha;
+			char block[32];
+			char num[2];
+			char picname[16];
+			float alph;
+
+
+
+			if (cl.inventory[i])
+			{
+				if (i==selected)
+				{
+					selected_num = num;
+					alpha=1.0;
+					boxalpha=1.0;
+					alph=255;
+					
+				}
+				else
+				{
+					alpha=0.55;
+					boxalpha=0.4;
+					alph = 150;
+				}
+				//Com_Printf ("%s\n",cl.configstrings[CS_ITEMS+i]);
+
+
+
+
+
+				if (i==9)
+					sprintf(picname, "%s", "w_freon");
+				else if (i==10)
+					sprintf(picname, "%s", "w_hammer");
+				else if (i==11)
+					sprintf(picname, "%s", "w_drill");
+				else
+					sprintf(picname, "%s", "w_camera");
+
+			}
+
+			if (cl.frame.playerstate.stats[STAT_WEAPBOX] < 20)
+			{
+				alpha *= adj;
+				boxalpha *= adj;
+				alph *= adj;
+			}
+
+			sprintf(num, "%i", i-8);
+			sprintf(block, "%s", cl.configstrings[CS_ITEMS+i]);
+			
+
+
+
+			
+			if (cl.inventory[i])
+			{
+				if (i!=selected)
+				{
+					R_DrawScaledPic (
+						scaledHud(560),
+						scaledHud(-560+(64*i)),
+						HudScale() * 0.45,
+						boxalpha, "w_box");
+				}
+				else
+				{
+					R_DrawScaledPic (
+						scaledHud(560),
+						scaledHud(-560+(64*i)),
+						HudScale() * 0.45,
+						boxalpha, "w_box_sel");
+				}
+
+				R_DrawScaledPic (
+					scaledHud(560),
+					scaledHud(-560+(64*i)),
+					HudScale() * 0.45,
+					alpha, picname);
+
+				//draw number.
+				Hud_DrawString (
+					scaledHud(607),
+					scaledHud(-535+(64*i)),
+					num,
+					alph);
+			}
+
+			if (i==selected)
+			{
+				sprintf(picname, "%s%s", picname,"_name");
+
+				R_DrawScaledPic (
+					scaledHud(500),
+					scaledHud(-560+(64*i)),
+					HudScale() * 0.45,
+					alpha, picname);
+			}
+		}
+	}
+#endif
 
 	SCR_InitHudScale ();
 	x = 0;
@@ -522,6 +793,28 @@ void CL_ExecuteLayoutString (char *s, qboolean isStatusBar)
 			SCR_DrawLegacyPic (x, y, getScreenScale(), token, scr_hudalpha->value);
 			continue;
 		}
+
+#ifndef NOTTHIRTYFLIGHTS
+		if (!strcmp(token, "picn2"))
+		{	// draw a pic from a name
+			token = COM_Parse (&s);
+
+			
+
+
+			SCR_AddDirtyPoint (x, y);
+
+			R_DrawFill2 (0, 0, viddef.width, viddef.height, 0, 0, 0, 180);
+
+			//zzzz
+			//SCR_AddDirtyPoint (x+scaledHud(24)-1, y+scaledHud(24)-1);
+
+
+			//R_DrawScaledPic (scaledHud(640-512), 0, HudScale()*0.5, 1.0, token);
+			R_DrawStretchPic (scaledHud(128), 0, scaledHud(512), viddef.height, token, 1.0);
+			continue;
+		}
+#endif
 
 		if (!strcmp(token, "num"))
 		{	// draw a number
