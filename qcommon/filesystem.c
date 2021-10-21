@@ -917,7 +917,9 @@ int FS_Read (void *buffer, int size, fileHandle_t f)
 			else
 			{	// Already tried once
 				//Com_Error(ERR_FATAL, va("FS_Read: 0 bytes read from %s", handle->name));
+#ifdef NOTTHIRTYFLIGHTS //bc hide this error message. todo: make it display during developer2 mode.
 				Com_DPrintf(S_COLOR_YELLOW"FS_Read: 0 bytes read from %s\n", handle->name);
+#endif
 				return size - remaining;
 			}
 		}

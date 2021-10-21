@@ -281,6 +281,7 @@ R_InitBloomTextures
 void R_InitBloomTextures (void)
 {
 
+	// FIXME TFOL -flibit
 //	r_bloom = Cvar_Get( "r_bloom", "0", CVAR_ARCHIVE );
 	r_bloom_alpha = Cvar_Get( "r_bloom_alpha", "0.25", CVAR_ARCHIVE );			// was 0.33
 	Cvar_SetDescription ("r_bloom_alpha", "Sets opacity of bloom blends.");

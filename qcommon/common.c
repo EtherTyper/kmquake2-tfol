@@ -1683,7 +1683,11 @@ void Qcommon_Init (int argc, char **argv)
 	fixedtime = Cvar_Get ("fixedtime", "0", CVAR_CHEAT);
 	Cvar_SetDescription ("fixedtime", "Fixed frametime feature.  Non-zero values set time in ms for each common frame.  This is considered a cheat in multiplayer.");
 
+#ifdef NOTTHIRTYFLIGHTS
 	logfile_active = Cvar_Get ("logfile", "0", 0);
+#else
+	logfile_active = Cvar_Get ("logfile", "2", 0);
+#endif
 	Cvar_SetDescription ("logfile", "Enables logging of console to qconsole.log.  Values > 1 cause writes on every console ouput.");
 	showtrace = Cvar_Get ("showtrace", "0", 0);
 	Cvar_SetDescription ("showtrace", "Toggles output of per-frame trace operation counts to console.");
@@ -1742,7 +1746,7 @@ void Qcommon_Init (int argc, char **argv)
 		SCR_EndLoadingPlaque ();
 	}
 
-	Com_Printf ("====== KMQuake2 Initialized ======\n\n");
+	Com_Printf ("====== " WINDOWNAME " Initialized ======\n\n");
 	
 	// testing crap
 	/*{
