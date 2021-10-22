@@ -243,7 +243,7 @@ void Menu_Main_Draw (void)
 
 		SCR_DrawPic (0, 0,
 			SCREEN_WIDTH, SCREEN_HEIGHT,
-			ALIGN_STRETCH,
+			ALIGN_STRETCH, false,
 			"/pics/vignette.tga", 1.0);
 	}
 	else
@@ -309,7 +309,7 @@ void Menu_Main_Draw (void)
 	UI_DrawPic (xoffset+5*sin(anglemod(cl.time*0.005)) ,
 		(ystart + m_main_cursor*40+3),
 		w*0.5, h*0.5,
-		ALIGN_CENTER, litname, 1.0);
+		ALIGN_CENTER, false, litname, 1.0);
 #endif
 }
 
@@ -399,7 +399,7 @@ void UI_CheckMainMenuMouse (void)
 #ifndef NOTTHIRTYFLIGHTS
 			if (!mainmouse)
 			{
-				sound = menu_move_sound;
+				sound = ui_menu_move_sound;
 				mainmouse=true;
 			}
 #endif

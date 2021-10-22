@@ -59,7 +59,7 @@ static menuaction_s		s_options_controls_back_action;
 static menulist_s		s_options_controls_console_box;
 static void ConsoleFunc( void *unused )
 {
-	Cvar_SetValue( "cl_enableconsole", s_options_controls_console_box.curvalue );
+	Cvar_SetValue( "cl_enableconsole", s_options_controls_console_box.curValue );
 }
 #endif
 
@@ -346,7 +346,7 @@ void Menu_Options_Controls_Init (void)
 	s_options_controls_console_box.generic.y	= y+=MENU_LINE_SIZE*2;
 	s_options_controls_console_box.generic.name	= "Enable Console";
 	s_options_controls_console_box.generic.callback = ConsoleFunc;
-	s_options_controls_console_box.itemnames = yesno_names;
+	s_options_controls_console_box.itemNames = yesno_names;
 #endif
 
 	s_options_controls_customize_keys_action.generic.type		= MTYPE_ACTION;

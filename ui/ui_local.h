@@ -101,6 +101,9 @@ typedef struct
 	unsigned flags;
 
 	const char *statusbar;
+#ifndef NOTTHIRTYFLIGHTS
+	const char	*iconname;
+#endif
 
 	void (*callback)( void *self );
 	void (*statusbarfunc)( void *self );
@@ -149,6 +152,9 @@ typedef struct
 typedef struct
 {
 	menucommon_s generic;
+#ifndef NOTTHIRTYFLIGHTS
+	const char	*iconname;
+#endif
 } menuaction_s;
 
 typedef struct

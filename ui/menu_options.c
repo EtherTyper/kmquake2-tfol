@@ -50,7 +50,7 @@ static menuaction_s		s_options_video_section;
 
 static menuframework_s		s_dialogue_menu;
 static menuaction_s		s_dialogue_text_section;
-static menuaction_s		s_dialogue_ok_section
+static menuaction_s		s_dialogue_ok_section;
 #endif
 
 //=======================================================================
@@ -153,7 +153,7 @@ void Menu_Options_Init (void)
 	s_options_video_section.generic.name		= "Display";
 	s_options_video_section.generic.x		= 0; //MENU_FONT_SIZE*0.5*strlen(s_options_sound_section.generic.name);
 	s_options_video_section.generic.y		= MENU_FONT_SIZE * 6;
-	s_options_video_section.generic.callback	= M_Menu_Video_f;
+	s_options_video_section.generic.callback	= Menu_Video_f;
 #endif
 
 	UI_AddMenuItem (&s_options_menu,	(void *) &s_options_sound_section);

@@ -31,6 +31,10 @@ int			ui_menudepth;
 void	(*m_drawfunc) (void);
 const char *(*m_keyfunc) (int key);
 
+#ifndef NOTTHIRTYFLIGHTS
+extern char *menu_click;
+#endif
+
 /*
 =======================================================================
 
@@ -653,7 +657,7 @@ const char *UI_DefaultMenuKey (menuframework_s *m, int key)
 				Menu_SelectItem( m );
 
 				if ( item->type == MTYPE_ACTION )
-					sound = menu_move_sound;
+					sound = ui_menu_move_sound;
 				
 			}
 		}

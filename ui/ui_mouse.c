@@ -32,7 +32,7 @@ cursor_t ui_mousecursor;
 
 #ifndef NOTTHIRTYFLIGHTS
 qboolean hasitem;
-static char *menu_click		= "misc/click.wav";
+char *menu_click		= "misc/click.wav";
 #endif
 
 /*
@@ -347,7 +347,7 @@ void UI_Mouseover_Check (menuframework_s *menu)
 								min[0] -= SCR_ScaledVideo(len*MENU_FONT_SIZE - LCOLUMN_OFFSET*2);
 							}
 
-							len = strlen(spin->itemnames[spin->curvalue]);
+							len = strlen(spin->itemNames[spin->curValue]);
 							max[0] += SCR_ScaledVideo(len*MENU_FONT_SIZE);
 						}
 
@@ -447,7 +447,7 @@ void UI_MouseCursor_Think (void)
 #ifdef NOTTHIRTYFLIGHTS
 		if (ui_mousecursor.buttonclicks[MOUSEBUTTON2])
 #else
-		if ((cursor.buttonclicks[MOUSEBUTTON1])||(cursor.buttonclicks[MOUSEBUTTON2]))
+		if ((ui_mousecursor.buttonclicks[MOUSEBUTTON1])||(ui_mousecursor.buttonclicks[MOUSEBUTTON2]))
 #endif
 		{
 			ui_mousecursor.buttonused[MOUSEBUTTON2] = true;
@@ -462,14 +462,14 @@ void UI_MouseCursor_Think (void)
 		}
 	}
 #ifndef NOTTHIRTYFLIGHTS
-	else if (m_drawfunc == M_Quit_Draw) //hack for quit menu
+	else if (m_drawfunc == Menu_Quit_Draw) //hack for quit menu
 	{
-		if (cursor.buttonclicks[MOUSEBUTTON2])
+		if (ui_mousecursor.buttonclicks[MOUSEBUTTON2])
 		{
-			cursor.buttonused[MOUSEBUTTON2] = true;
-			cursor.buttonclicks[MOUSEBUTTON2] = 0;
-			cursor.buttonused[MOUSEBUTTON1] = true;
-			cursor.buttonclicks[MOUSEBUTTON1] = 0;
+			ui_mousecursor.buttonused[MOUSEBUTTON2] = true;
+			ui_mousecursor.buttonclicks[MOUSEBUTTON2] = 0;
+			ui_mousecursor.buttonused[MOUSEBUTTON1] = true;
+			ui_mousecursor.buttonclicks[MOUSEBUTTON1] = 0;
 
 			S_StartLocalSound ("world/cheer.wav");
 
@@ -499,7 +499,7 @@ void UI_MouseCursor_Think (void)
 #ifndef NOTTHIRTYFLIGHTS
 		if (!hasitem)
 		{
-			sound = menu_move_sound;
+			sound = ui_menu_move_sound;
 			hasitem=true;
 		}
 #endif

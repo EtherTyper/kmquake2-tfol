@@ -1799,7 +1799,7 @@ SCR_DrawCrosshair
 Moved from cl_view.c, what the hell was it doing there?
 =================
 */
-//#define DIV640 0.0015625
+#define DIV640 0.0015625
 #define CROSSHAIR_SIZE 32
 
 // Psychospaz's new crosshair code
@@ -1912,7 +1912,7 @@ void SCR_DrawCrosshair (void)
 
 				
 		
-		keymsg = SCR_FindKey("+use",true);
+		keymsg = SCR_FindKey("+use");
 
 		//Com_Printf ("%s\n",keymsg);				
 
@@ -2030,7 +2030,7 @@ void SCR_DrawPause (void)
 #else
 	w*= 0.5;
 	h*= 0.5;
-	SCR_DrawPic ((SCREEN_WIDTH-w)*0.5, (SCREEN_HEIGHT-h) * 0.8, w, h, ALIGN_CENTER, "pause", 1.0);
+	SCR_DrawPic ((SCREEN_WIDTH-w)*0.5, (SCREEN_HEIGHT-h) * 0.8, w, h, ALIGN_CENTER, false, "pause", 1.0);
 #endif
 }
 
@@ -2204,7 +2204,7 @@ void SCR_DrawLoading (void)
 
 			SCR_DrawPic (0, 0,
 				SCREEN_WIDTH, SCREEN_HEIGHT,
-				ALIGN_STRETCH,
+				ALIGN_STRETCH, false,
 				"/pics/vignette.tga", 1.0);
 		}
 #endif
@@ -2304,7 +2304,7 @@ void SCR_DrawLoading (void)
 #else
 		SCR_DrawLoadingBar (SCREEN_WIDTH /2 - (170/2), SCREEN_HEIGHT - 95,
 			170, 10,
-			(int)loadingPercent, 0.6);
+			(int)cls.loadingPercent, 0.6);
 #endif
 	}
 #ifdef NOTTHIRTYFLIGHTS

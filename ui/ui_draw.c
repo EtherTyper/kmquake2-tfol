@@ -263,12 +263,12 @@ void UI_Draw_Cursor (void)
 	char *overlay = NULL;
 	char *cur_img = NULL;
 
-	if (m_drawfunc == M_Main_Draw)
+	if (m_drawfunc == Menu_Main_Draw)
 	{
 		if (MainMenuMouseHover)
 		{
-			if ((cursor.buttonused[0] && cursor.buttonclicks[0])
-				|| (cursor.buttonused[1] && cursor.buttonclicks[1]))
+			if ((ui_mousecursor.buttonused[0] && ui_mousecursor.buttonclicks[0])
+				|| (ui_mousecursor.buttonused[1] && ui_mousecursor.buttonclicks[1]))
 			{
 				cur_img = "/gfx/m_cur_click.pcx";
 				alpha = 0.85 + 0.15*sin(anglemod(cl.time*0.005));
@@ -286,16 +286,16 @@ void UI_Draw_Cursor (void)
 	}
 	else
 	{
-		if (cursor.menuitem)
+		if (ui_mousecursor.menuitem)
 		{
-			if (cursor.menuitemtype == MENUITEM_TEXT)
+			if (ui_mousecursor.menuitemtype == MENUITEM_TEXT)
 			{
 				cur_img = "/gfx/m_cur_text.pcx";
 			}
 			else
 			{
-				if ((cursor.buttonused[0] && cursor.buttonclicks[0])
-					|| (cursor.buttonused[1] && cursor.buttonclicks[1]))
+				if ((ui_mousecursor.buttonused[0] && ui_mousecursor.buttonclicks[0])
+					|| (ui_mousecursor.buttonused[1] && ui_mousecursor.buttonclicks[1]))
 				{
 					cur_img = "/gfx/m_cur_click.pcx";
 					alpha = 0.85 + 0.15*sin(anglemod(cl.time*0.005));
@@ -318,13 +318,13 @@ void UI_Draw_Cursor (void)
 	if (cur_img)
 	{
 		R_DrawGetPicSize( &w, &h, cur_img );
-		R_DrawScaledPic( cursor.x - scale*w/2, cursor.y - scale*h/2, scale, 1.0, cur_img);
+		R_DrawScaledPic( ui_mousecursor.x - scale*w/2, ui_mousecursor.y - scale*h/2, scale, 1.0, cur_img);
 
 		/*
 		if (overlay)
 		{
 			R_DrawGetPicSize( &w, &h, overlay );
-			R_DrawScaledPic( cursor.x - scale*w/2, cursor.y - scale*h/2, scale, 1, overlay);
+			R_DrawScaledPic( ui_mousecursor.x - scale*w/2, ui_mousecursor.y - scale*h/2, scale, 1, overlay);
 		}
 		*/
 	}

@@ -536,8 +536,10 @@ void SV_WriteServerFile (qboolean autosave, qboolean checkpoint)
 	
 	if (autosave)
 		Com_sprintf (comment, sizeof(comment), "AUTO SAVE");
+#ifdef NOTTHIRTYFLIGHTS
 	else if (quicksave)
 		Com_sprintf (comment, sizeof(comment), "QUICK SAVE");
+#endif
 
 	fwrite (infoHeader, 1, sizeof(infoHeader), f);
 	fwrite (newtime, 1, sizeof(struct tm), f);

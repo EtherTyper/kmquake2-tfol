@@ -240,7 +240,7 @@ void Menu_Game_Init (void)
 	s_load_game_action.generic.name			= "Load Game";
 #else
 	s_load_game_action.generic.name			= "load";
-	s_load_game_action.generic.iconname =		= "load";
+	s_load_game_action.generic.iconname		= "load";
 #endif
 	s_load_game_action.generic.callback		= LoadGameFunc;
 
@@ -291,7 +291,7 @@ void Menu_Game_Init (void)
 #else
 	UI_AddMenuItem (&s_game_menu, (void *) &s_medium_game_action);
 	UI_AddMenuItem (&s_game_menu, (void *) &s_commentarymode);
-	UI_AddMenuItem (&s_game_menu, (void *) &gravitybone);
+	UI_AddMenuItem (&s_game_menu, (void *) &s_gravitybone);
 #endif
 
 	UI_AddMenuItem (&s_game_menu, (void *) &s_blankline);
@@ -315,7 +315,7 @@ void icondraw (char *name)
 	h *= 0.5;
 	SCR_DrawPic (SCREEN_WIDTH/2 - 200 + (6*sin(anglemod(cl.time*0.0025))),
 		SCREEN_HEIGHT/2 - 60 + (3*sin(anglemod(cl.time*0.005))),
-		w, h, ALIGN_CENTER, name, 1);
+		w, h, ALIGN_CENTER, false, name, 1);
 }
 
 void Menu_Game_Draw (void)

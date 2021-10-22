@@ -780,9 +780,9 @@ const char *UI_MenuKeyBind_Key (menukeybind_s *k, int key)
 
 void checkbox_DoEnter( menulist_s *s )
 {
-	s->curvalue++;
-	if ( s->itemnames[s->curvalue] == 0 )
-		s->curvalue = 0;
+	s->curValue++;
+	if ( s->itemNames[s->curValue] == 0 )
+		s->curValue = 0;
 
 	if ( s->generic.callback )
 		s->generic.callback( s );
@@ -790,18 +790,18 @@ void checkbox_DoEnter( menulist_s *s )
 
 void checkbox_DoSlide( menulist_s *s, int dir )
 {
-	s->curvalue += dir;
+	s->curValue += dir;
 
-	/*if ( s->curvalue < 0 )
-		s->curvalue = 0;
-	else if ( s->itemnames[s->curvalue] == 0 )
-		s->curvalue--;*/
+	/*if ( s->curValue < 0 )
+		s->curValue = 0;
+	else if ( s->itemnames[s->curValue] == 0 )
+		s->curValue--;*/
 
 
-	if ( s->curvalue > 1 )
-		s->curvalue = 0;
-	else if ( s->curvalue < 0 )
-		s->curvalue = 1;
+	if ( s->curValue > 1 )
+		s->curValue = 0;
+	else if ( s->curValue < 0 )
+		s->curValue = 1;
 
 
 	if ( s->generic.callback )
@@ -830,7 +830,7 @@ void checkbox_Draw( menulist_s *s  )
 		}
 	}
 
-	if ( s->curvalue > 0 )
+	if ( s->curValue > 0 )
 	{
 		strcpy(buffer, "m_checkbox_on");
 	}
