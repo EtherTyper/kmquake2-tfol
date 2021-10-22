@@ -215,6 +215,7 @@ void Menu_Main_Draw (void)
 	char litname[80];
 #ifndef NOTTHIRTYFLIGHTS
 	int selnum;
+	drawStruct_t ds;
 #endif
 
 	FindMenuCoords (&xoffset, &ystart, &totalheight, &widest);
@@ -234,12 +235,21 @@ void Menu_Main_Draw (void)
 
 		//BC MAIN MENU FULLSCREEN
 
-		R_DrawStretchPic (
+		memset(&ds, 0, sizeof(drawStruct_t));
+		ds.pic = "m_main_bg";
+		ds.x = margin;
+		ds.y = 0;
+		ds.w = bgWidth;
+		ds.h = viddef.height;
+		Vector2Copy(vec2_origin, ds.offset);
+		Vector4Copy(vec4_identity, ds.color);
+		R_DrawPic(ds);
+		/*R_DrawStretchPic (
 			margin,
 			0,
 			bgWidth,
 			viddef.height,
-			"m_main_bg", 1.0);
+			"m_main_bg", 1.0);*/
 
 		SCR_DrawPic (0, 0,
 			SCREEN_WIDTH, SCREEN_HEIGHT,
@@ -253,13 +263,22 @@ void Menu_Main_Draw (void)
 
 		int boxsize = viddef.height * 0.35;
 
-		R_DrawStretchPic (
+		memset(&ds, 0, sizeof(drawStruct_t));
+		ds.pic = "m_main_minibox";
+		ds.x = (viddef.width /2) + (adjustedWidth * 0.1);
+		ds.y = posy;
+		ds.w = boxsize;
+		ds.h = boxsize;
+		Vector2Copy(vec2_origin, ds.offset);
+		Vector4Copy(vec4_identity, ds.color);
+		R_DrawPic(ds);
+		/*R_DrawStretchPic (
 			//adjustedWidth * 0.65,
 			(viddef.width /2) + (adjustedWidth * 0.1),
 			posy,
 			boxsize,
 			boxsize,
-			"m_main_minibox", 1.0);
+			"m_main_minibox", 1.0);*/
 	}
 #endif
 
