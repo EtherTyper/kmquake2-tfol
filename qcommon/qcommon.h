@@ -1051,5 +1051,12 @@ void SV_Init (void);
 void SV_Shutdown (char *finalmsg, qboolean reconnect);
 void SV_Frame (int msec);
 
+// flibit added these, for custom standalone games
+#ifndef WINDOWNAME
+#define WINDOWNAME "KMQuake2"
+#endif
+#ifndef SAVENAME
+#define SAVENAME "quake2"
+#endif
 
 #endif // __QCOMMON_H
