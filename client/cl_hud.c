@@ -379,23 +379,23 @@ void CL_ExecuteLayoutString (char *s, qboolean isStatusBar)
 
 		if (Q_stricmp( mapfile, "parlo1") == 0) //name of GB map.
 		{
-			R_DrawScaledPic (viddef.width/2 - SCR_ScaledHud(180), viddef.height/2 - SCR_ScaledHud(45), SCR_GetHudScale() * 0.7, value * 0.01, "hint_title");	//GB image
+			SCR_DrawLegacyPic (viddef.width/2 - SCR_ScaledHud(180), viddef.height/2 - SCR_ScaledHud(45), SCR_GetHudScale() * 0.7, "hint_title", value * 0.01);	//GB image
 		}
 		else
 		{
-			R_DrawScaledPic (
+			SCR_DrawLegacyPic (
 				viddef.width - 512 - 64,
 				viddef.height/2 - 256,
 				1,
-				value * 0.01,
-				"title");
+				"title",
+				value * 0.01);
 
-			R_DrawScaledPic (
+			SCR_DrawLegacyPic (
 				viddef.width/2 - 256,
 				viddef.height - 148,
 				1,
-				value * 0.01,
-				"copyright");
+				"copyright",
+				value * 0.01);
 		}
 	}
 
@@ -436,32 +436,32 @@ void CL_ExecuteLayoutString (char *s, qboolean isStatusBar)
 		
 
 
-			R_DrawScaledPic (
+			SCR_DrawLegacyPic (
 				viddef.width/2 - SCR_ScaledHud(240),
 				viddef.height/2 - SCR_ScaledHud(16),
 				SCR_GetHudScale() * 0.5,
-				1.0,
-				"contractcomplete");
+				"contractcomplete",
+				1.0);
 
 	}
 	else if (value == 2)
 	{
-		R_DrawScaledPic (
+		SCR_DrawLegacyPic (
 			SCR_ScaledHud(1),
 			viddef.height - SCR_ScaledHud(64),
 			SCR_GetHudScale() * 0.35,
-			1.0,
-			"find_exit");
+			"find_exit",
+			1.0);
 	}
 	else if (value == 3)
 	{
 		//TFOL "the end"
-		R_DrawScaledPic (
+		SCR_DrawLegacyPic (
 			viddef.width - SCR_ScaledHud(128),
 			viddef.height - SCR_ScaledHud(128),
 			SCR_GetHudScale() * 0.8,
-			1.0,
-			"drunk");
+			"drunk",
+			1.0);
 	}
 
 	
@@ -475,13 +475,22 @@ void CL_ExecuteLayoutString (char *s, qboolean isStatusBar)
 	{
 		if (cl.frame.playerstate.stats[STAT_SELECTED_ITEM] == 12)
 		{
-			R_DrawStretchPic (
+			memset(&ds, 0, sizeof(drawStruct_t));
+			ds.pic = "/pics/viewfinder.tga";
+			ds.x = 0;
+			ds.y = 0;
+			ds.w = viddef.width;
+			ds.h = viddef.height;
+			Vector2Copy(vec2_origin, ds.offset);
+			Vector4Copy(vec4_identity, ds.color);
+			R_DrawPic(ds);
+			/*R_DrawStretchPic (
 				0,
 				0,
 				viddef.width,
 				viddef.height,
 				"/pics/viewfinder.tga",
-				1.0);
+				1.0);*/
 
 
 			if (cl.frame.playerstate.stats[STAT_PHOTOCOUNT])
@@ -577,26 +586,26 @@ void CL_ExecuteLayoutString (char *s, qboolean isStatusBar)
 			{
 				if (i!=selected)
 				{
-					R_DrawScaledPic (
+					SCR_DrawLegacyPic (
 						SCR_ScaledHud(560),
 						SCR_ScaledHud(-560+(64*i)),
 						SCR_GetHudScale() * 0.45,
-						boxalpha, "w_box");
+						"w_box", boxalpha);
 				}
 				else
 				{
-					R_DrawScaledPic (
+					SCR_DrawLegacyPic (
 						SCR_ScaledHud(560),
 						SCR_ScaledHud(-560+(64*i)),
 						SCR_GetHudScale() * 0.45,
-						boxalpha, "w_box_sel");
+						"w_box_sel", boxalpha);
 				}
 
-				R_DrawScaledPic (
+				SCR_DrawLegacyPic (
 					SCR_ScaledHud(560),
 					SCR_ScaledHud(-560+(64*i)),
 					SCR_GetHudScale() * 0.45,
-					alpha, picname);
+					picname, alpha);
 
 				//draw number.
 				Hud_DrawString (
@@ -611,11 +620,11 @@ void CL_ExecuteLayoutString (char *s, qboolean isStatusBar)
 			{
 				sprintf(picname, "%s%s", picname,"_name");
 
-				R_DrawScaledPic (
+				SCR_DrawLegacyPic (
 					SCR_ScaledHud(500),
 					SCR_ScaledHud(-560+(64*i)),
 					SCR_GetHudScale() * 0.45,
-					alpha, picname);
+					picname, alpha);
 			}
 		}
 	}

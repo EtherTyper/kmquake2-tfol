@@ -318,7 +318,7 @@ void UI_Draw_Cursor (void)
 	if (cur_img)
 	{
 		R_DrawGetPicSize( &w, &h, cur_img );
-		R_DrawScaledPic( ui_mousecursor.x - scale*w/2, ui_mousecursor.y - scale*h/2, scale, 1.0, cur_img);
+		SCR_DrawLegacyPic( ui_mousecursor.x - scale*w/2, ui_mousecursor.y - scale*h/2, scale, cur_img, 1.0);
 
 		/*
 		if (overlay)

@@ -1881,12 +1881,13 @@ void SCR_DrawCrosshair (void)
 	
 	if (cl.frame.playerstate.stats[STAT_USEABLE] < 1)
 	{
-		R_DrawScaledPic (scr_vrect.x + ((scr_vrect.width - scale*crosshair_width)/2), // width
+		SCR_DrawLegacyPic (scr_vrect.x + ((scr_vrect.width - scale*crosshair_width)/2), // width
 			scr_vrect.y + ((scr_vrect.height - scale*crosshair_height)/2),	// height
 			scale,	// scale
-			alpha,
-			//0.75 + 0.25*sin(anglemod(cl.time*0.005)),	// alpha
-			crosshair_pic); // pic
+			crosshair_pic,
+			alpha
+			//0.75 + 0.25*sin(anglemod(cl.time*0.005))	// alpha
+			); // pic
 	}
 	else
 	{
