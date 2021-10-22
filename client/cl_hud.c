@@ -832,7 +832,7 @@ void CL_ExecuteLayoutString (char *s, qboolean isStatusBar)
 
 			// FIXME TFOL -flibit SCR_AddDirtyPoint (x, y);
 
-			R_DrawFill2 (0, 0, viddef.width, viddef.height, 0, 0, 0, 180);
+			// FIXME TFOL -flibit R_DrawFill2 (0, 0, viddef.width, viddef.height, 0, 0, 0, 180);
 
 			//zzzz
 			//SCR_AddDirtyPoint (x+scaledHud(24)-1, y+scaledHud(24)-1);

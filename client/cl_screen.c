@@ -2205,7 +2205,7 @@ void SCR_DrawLoading (void)
 		{
 			drawStruct_t ds;
 
-			SCR_DrawFill2 (0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, ALIGN_STRETCH, 255, 255, 255, 255);
+			// SCR_DrawFill2 (0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, ALIGN_STRETCH, 255, 255, 255, 255);
 
 			//BC 45PRM LP LOADING SCREEN
 			

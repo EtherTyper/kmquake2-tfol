@@ -226,11 +226,11 @@ void Menu_Main_Draw (void)
 		int bgWidth = (viddef.height * 4) / 3.3f;
 		int margin = (viddef.width - bgWidth) / 2;
 
-		SCR_DrawFill2 (0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, ALIGN_STRETCH, 52,47,0, 255);
+		//SCR_DrawFill2 (0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, ALIGN_STRETCH, 52,47,0, 255);
 
 		for (i = 0; i < SCREEN_HEIGHT; i += 48)
 		{
-			SCR_DrawFill2 (0, i, SCREEN_WIDTH, 32, ALIGN_STRETCH, 0,0,0, 64);
+			//SCR_DrawFill2 (0, i, SCREEN_WIDTH, 32, ALIGN_STRETCH, 0,0,0, 64);
 		}
 
 		//BC MAIN MENU FULLSCREEN
