@@ -1425,7 +1425,7 @@ void pLobbyGlassThink (cparticle_t *p, vec3_t org, vec3_t angle, float *alpha, f
 	VectorSubtract(p->angle, org, len);
 
 	*size *= (float)(10/VectorLength(len)) * 1.0/((4-*size));
-	*size += *time * p->sizevel;
+	*size += time * p->sizevel;
 
 	if (*size > 10)
 		*size = 10;
@@ -1495,7 +1495,7 @@ void CL_LavaParticles (vec3_t org, vec3_t dir, int count, int red, int green, in
 			org[2] + dir[2]*(1 + random()*16 )
 			);
 
-		p = setupParticle (
+		p = CL_SetupParticle (
 			org[0],	org[1],	org[2],
 			origin[0],	origin[1],	origin[2],
 			(dir[0]*75 + crand()*40)*speed,	(dir[1]*75 + crand()*40)*speed,	(dir[2]*75 + crand()*40)*speed,
@@ -1523,7 +1523,7 @@ void CL_LavaParticles (vec3_t org, vec3_t dir, int count, int red, int green, in
 			org[2] + dir[2]*(1 + random()*16 )
 			);
 
-		p = setupParticle (
+		p = CL_SetupParticle (
 			org[0],	org[1],	org[2],
 			origin[0],	origin[1],	origin[2],
 			(dir[0]*75 + crand()*40)*speed,	(dir[1]*75 + crand()*40)*speed,	(dir[2]*75 + crand()*40)*speed,
@@ -1566,7 +1566,7 @@ void CL_HeartParticles (vec3_t org, vec3_t dir, int count, int red, int green, i
 			org[2] + dir[2]*(1 + random()*2)
 			);
 
-		p = setupParticle (
+		p = CL_SetupParticle (
 			crandom() * 4, crandom() * 4,crandom() * 4,
 			//org[1],	org[2],
 			origin[0],	origin[1],	origin[2],
@@ -1582,7 +1582,7 @@ void CL_HeartParticles (vec3_t org, vec3_t dir, int count, int red, int green, i
 			5,	-0.1,	
 			particle_heart,
 			0,
-			pBlasterThink,true);
+			CL_ParticleBlasterThink,true);
 	}
 }
 
@@ -1624,7 +1624,7 @@ void CL_MusicParticles (vec3_t org, vec3_t dir, int count, int red, int green, i
 		origin[1] += cos(ltime * 1.5) * 8;
 
 
-		p = setupParticle (
+		p = CL_SetupParticle (
 			0,0, 0,
 			origin[0],	origin[1],	origin[2],
 
@@ -1664,7 +1664,7 @@ void CL_WaterfallParticles (vec3_t org, vec3_t dir, int count, int red, int gree
 			org[2] + (-8 + random()*16 )
 			);
 
-		p = setupParticle (
+		p = CL_SetupParticle (
 			org[0],	org[1],	org[2],
 			origin[0],	origin[1],	origin[2],
 			(dir[0]*75 + crand()*64)*speed,
@@ -1692,7 +1692,7 @@ void CL_WaterfallParticles (vec3_t org, vec3_t dir, int count, int red, int gree
 			org[2] + (-6 + random()*12 )
 			);
 
-		p = setupParticle (
+		p = CL_SetupParticle (
 			org[0],	org[1],	org[2],
 			origin[0],	origin[1],	origin[2],
 			(dir[0]*75 + crand()*8)*speed,
@@ -1727,7 +1727,7 @@ void CL_WaterfallParticles (vec3_t org, vec3_t dir, int count, int red, int gree
 			org[2] + (-12 + random()*24 )			
 			);
 
-		p = setupParticle (
+		p = CL_SetupParticle (
 			org[0],	org[1],	org[2],
 			origin[0],	origin[1],	origin[2],
 
@@ -1822,7 +1822,7 @@ void CL_FreonParticles (vec3_t org, vec3_t dir, int count, int red, int green, i
 			org[2] + dir[2]*(1 + random()*3 + pBlasterMaxSize/2.0)
 			);
 
-		p = setupParticle (
+		p = CL_SetupParticle (
 			org[0],	org[1],	org[2],
 			origin[0],	origin[1],	origin[2],
 			(dir[0]*7 + crand()*4)*speed,	(dir[1]*7 + crand()*4)*speed,	(dir[2]*7 + crand()*4)*speed,
@@ -1837,7 +1837,7 @@ void CL_FreonParticles (vec3_t org, vec3_t dir, int count, int red, int green, i
 			pFreonThink,true);
 	
 	/*	d = rand()&5;
-		p = setupParticle (
+		p = CL_SetupParticle (
 			org[0],	org[1],	org[2],
 			org[0]+((rand()&5)-2)+d*dir[0],	org[1]+((rand()&5)-2)+d*dir[1],	org[2]+((rand()&5)-2)+d*dir[2],
 			(dir[0]*50 + crand()*20)*speed,	(dir[1]*50 + crand()*20)*speed,	(dir[2]*50 + crand()*20)*speed,
@@ -1889,7 +1889,7 @@ void CL_bloodcough(vec3_t org, vec3_t dir,  int count,
 
 		VectorAdd (velocity, dir, velocity);	
 
-		p = setupParticle (
+		p = CL_SetupParticle (
 			org[0],	org[1],	org[2],
 
 			origin[0],	origin[1],	origin[2],
@@ -1928,7 +1928,7 @@ void CL_burpgas(vec3_t org, vec3_t dir, int count,
 			org[2]
 			);
 
-		p = setupParticle (
+		p = CL_SetupParticle (
 			org[0],	org[1],	org[2],
 
 			origin[0],	origin[1],	origin[2],
@@ -1985,7 +1985,7 @@ void CL_shred (vec3_t org, vec3_t dir, int count,
 		else
 			rsize = 2 + crand() * 1;
 
-		p = setupParticle (
+		p = CL_SetupParticle (
 			org[0] + crand() * 350,	org[1]+ crand() * 350,	org[2]+ crand() * 350,
 			origin[0] + crand()* 8,	origin[1]+ crand()* 8,	origin[2]+ crand()* 8,
 			(dir[0]*0.2 + crand()*2.9)*speed,	(dir[1]*0.2 + crand()*2.9)*speed,	(dir[2]*1.5 + crand()*1)*speed,
@@ -2025,7 +2025,7 @@ void CL_lobbyglass (vec3_t org, vec3_t dir, int count,
 			org[2]
 			);
 
-		p = setupParticle (
+		p = CL_SetupParticle (
 			org[0] + crand() * 350,	org[1]+ crand() * 350,	org[2]+ crand() * 350,
 			origin[0] + crand()*48,	origin[1]+ crand()*48,	     origin[2]+ crand()*5,
 			(dir[0]*0.2 + crand()*2.9)*speed,	(dir[1]*0.2 + crand()*2.9)*speed,	zspeed,
@@ -2039,7 +2039,7 @@ void CL_lobbyglass (vec3_t org, vec3_t dir, int count,
 			PART_GRAVITY   /*|PART_TRANS|PART_SHADED*/,
 			NULL,true);
 		
-		p = setupParticle (
+		p = CL_SetupParticle (
 			org[0] + crand() * 350,	org[1]+ crand() * 350,	org[2]+ crand() * 350,
 			origin[0] + crand()*5,	origin[1]+ crand()*5,	origin[2]+ crand()*5,
 			(dir[0]*0.2 + crand()*3.9)*speed,	(dir[1]*0.2 + crand()*3.9)*speed,	zspeed,
@@ -2078,7 +2078,7 @@ void CL_wineglassbreak (vec3_t org, vec3_t dir, int count,
 			org[2]
 			);
 
-		p = setupParticle (
+		p = CL_SetupParticle (
 			org[0],	org[1],	org[2],
 
 			origin[0] + crand()*0.3,	origin[1]+ crand()*0.3,	origin[2]+ crand()*0.3,
@@ -2095,7 +2095,7 @@ void CL_wineglassbreak (vec3_t org, vec3_t dir, int count,
 			PART_GRAVITY,
 			NULL,0);
 		
-		p = setupParticle (
+		p = CL_SetupParticle (
 			org[0],	org[1],	org[2],
 
 			origin[0] + crand()*0.3,	origin[1]+ crand()*0.3,	origin[2]+ crand()*0.3,
@@ -2139,7 +2139,7 @@ void CL_cigsmoke (vec3_t org, vec3_t dir, int count,
 			org[2]
 			);
 
-		p = setupParticle (
+		p = CL_SetupParticle (
 			org[0],	org[1],	org[2],
 
 			origin[0],	origin[1],	origin[2],
@@ -2177,7 +2177,7 @@ void CL_cigbigsmoke (vec3_t org, vec3_t dir, int count,
 			org[2]
 			);
 
-		p = setupParticle (
+		p = CL_SetupParticle (
 			org[0],	org[1],	org[2],
 
 			origin[0],	origin[1],	origin[2],
@@ -2625,7 +2625,7 @@ void CL_DiminishingTrail (vec3_t start, vec3_t end, centity_t *old, int flags)
 							PART_GRAVITY|PART_SHADED,
 							CL_ParticleBloodThink, true);
 #else
-						p = setupParticle (
+						p = CL_SetupParticle (
 							0,	0,	random()*360,
 							move[0] + crand()*orgscale,	move[1] + crand()*orgscale,	move[2] + crand()*orgscale,
 							crand()*velscale,	crand()*velscale,	crand()*velscale,
@@ -2637,7 +2637,7 @@ void CL_DiminishingTrail (vec3_t start, vec3_t end, centity_t *old, int flags)
 							0.01,			0,
 							particle_shield,
 							PART_OVERBRIGHT|PART_GRAVITY|PART_SHADED,
-							pBloodThink,true);
+							CL_ParticleBloodThink,true);
 #endif
 					if ( p && (crand() < (double)0.0001F) )
 						p->flags |= PART_LEAVEMARK;

@@ -1133,6 +1133,8 @@ CL_AddPacketEntities
 
 ===============
 */
+// FIXME TFOL -flibit
+void CL_FreonEffect (vec3_t start, vec3_t end, vec3_t angle, int red, int green, int blue, int reddelta, int greendelta, int bluedelta, float len, float size);
 void CL_AddPacketEntities (frame_t *frame)
 {
 	entity_t			ent;

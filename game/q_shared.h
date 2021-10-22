@@ -1397,6 +1397,39 @@ typedef enum
 #define STAT_SPECTATOR			17
 #define STAT_SPEED              22
 #define STAT_ZOOM               23
+
+
+#ifndef NOTTHIRTYFLIGHTS
+#define STAT_HINTTITLE			24
+#define STAT_USEABLE			25
+#define STAT_HUDMSG			26
+#define STAT_WEAPBOX			27
+#define STAT_PHOTOCOUNT			28
+#define STAT_MAXPHOTOS			29
+#define STAT_VL_ON			30 //viewlock.
+#define STAT_VL_BASE			31
+#define STAT_VL_RANGE			32
+#define STAT_FREEZE			33
+#define STAT_CAMTURN			34
+#define STAT_ATTACHMENT1		35
+#define STAT_CAMDIP			36
+#define STAT_ATTACHMENT2		37
+#define STAT_ATTACHMENT1FRAME		38
+#define STAT_ATTACHMENT2FRAME		39
+#define STAT_ATTACHMENT1SKIN		40
+#define STAT_ATTACHMENT2SKIN		41
+#define STAT_ATTACHMENT1HEIGHT		42
+#define STAT_ATTACHMENT2HEIGHT		43
+#define STAT_BLOOMINTENSITY		44
+#define STAT_BLOOMALPHA			45
+#define STAT_BLOOMDARKEN		46
+#define STAT_GODMODE			47
+#define STAT_MOVESLOW			48
+#define STAT_GUNARMS			49
+#define STAT_GUNARM_YAW			50
+#define STAT_GUNARM_PITCH		51
+#endif
+
 // Knightmare- some extra stats for scripted HUDs
 #define STAT_TIMER_RANGE		251
 #define STAT_MAXAMMO			252

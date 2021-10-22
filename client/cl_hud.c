@@ -474,7 +474,7 @@ void CL_ExecuteLayoutString (char *s, qboolean isStatusBar)
 				sprintf(pcount, "%d of %d Photos", cl.frame.playerstate.stats[STAT_PHOTOCOUNT], cl.frame.playerstate.stats[STAT_MAXPHOTOS]);
 
 				//cl.frame.playerstate.stats[STAT_PHOTOCOUNT]
-				Hud_DrawString (scaledHud(270), scaledHud(465), pcount, 255);
+				Hud_DrawString (scaledHud(270), scaledHud(465), pcount, 255, false);
 			}
 		}
 	}
@@ -587,7 +587,8 @@ void CL_ExecuteLayoutString (char *s, qboolean isStatusBar)
 					scaledHud(607),
 					scaledHud(-535+(64*i)),
 					num,
-					alph);
+					alph,
+					false);
 			}
 
 			if (i==selected)
