@@ -145,7 +145,9 @@ __inline int Q_vsnprintf (char *Dest, size_t Count, const char *Format, va_list 
 #define LARGE_MAP_SIZE
 // enable to include looping of attenuated sounds
 // changes entity_state_t struct
+#ifdef NOTTHIRTYFLIGHTS
 #define LOOP_SOUND_ATTENUATION
+#endif
 // enable to save compressed savegame files
 #define COMPRESSED_SAVEGAMES
 #endif
@@ -1632,7 +1634,7 @@ typedef struct entity_state_s
 	int		modelindex;
 	int		modelindex2, modelindex3, modelindex4;	// weapons, CTF flags, etc
 #ifdef NEW_ENTITY_STATE_MEMBERS // Knightmare- Privater wanted this
-	int		modelindex5, modelindex6; 	// more attached models
+	int		modelindex5, modelindex6, modelindex7, modelindex8; 	// more attached models
 #endif
 	int		frame;
 	int		skinnum;
