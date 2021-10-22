@@ -310,6 +310,7 @@ void CL_ExecuteLayoutString (char *s, qboolean isStatusBar)
 	int		selected;
 	int		num,selected_num,i;
 	int w, h;
+	drawStruct_t ds;
 #endif
 
 	if (cls.state != ca_active || !cl.refresh_prepped)
@@ -341,13 +342,23 @@ void CL_ExecuteLayoutString (char *s, qboolean isStatusBar)
 	}
 #else
 	//FULLSCREEN VIGNETTE EFFECT
-	R_DrawStretchPic (
+	memset(&ds, 0, sizeof(drawStruct_t));
+	ds.pic = "/pics/vignette.pcx";
+	ds.x = 0;
+	ds.y = 0;
+	ds.w = viddef.width;
+	ds.h = viddef.height;
+	Vector2Copy(vec2_origin, ds.offset);
+	Vector4Copy(vec4_identity, ds.color);
+	ds.color[3] = 0.8;
+	R_DrawPic(ds);
+	/*R_DrawStretchPic (
 		0,
 		0,
 		viddef.width,
 		viddef.height,
 		"/pics/vignette.pcx",
-		0.8);
+		0.8);*/
 
 
 	value = cl.frame.playerstate.stats[STAT_HINTTITLE];
@@ -390,18 +401,23 @@ void CL_ExecuteLayoutString (char *s, qboolean isStatusBar)
 
 
 	//terrible hack. the last drawn thing gets corrupted for some reason. so this is a little dummy picture.
-		R_DrawStretchPic (
+	memset(&ds, 0, sizeof(drawStruct_t));
+	ds.pic = "/pics/ch1.pcx";
+	ds.x = 0;
+	ds.y = 0;
+	ds.w = 1;
+	ds.h = 1;
+	Vector2Copy(vec2_origin, ds.offset);
+	Vector4Copy(vec4_identity, ds.color);
+	ds.color[3] = 0;
+	R_DrawPic(ds);
+	/*R_DrawStretchPic (
 		0,
 		0,
 		1,
 		1,
 		"/pics/ch1.pcx",
-		0);
-
-	
-
-	
-
+		0);*/
 
 	value = cl.frame.playerstate.stats[STAT_HUDMSG];
 
@@ -798,12 +814,14 @@ void CL_ExecuteLayoutString (char *s, qboolean isStatusBar)
 #ifndef NOTTHIRTYFLIGHTS
 		if (!strcmp(token, "picn2"))
 		{	// draw a pic from a name
+			drawStruct_t ds;
+
 			token = COM_Parse (&s);
 
 			
 
 
-			SCR_AddDirtyPoint (x, y);
+			// FIXME TFOL -flibit SCR_AddDirtyPoint (x, y);
 
 			R_DrawFill2 (0, 0, viddef.width, viddef.height, 0, 0, 0, 180);
 
@@ -812,7 +830,16 @@ void CL_ExecuteLayoutString (char *s, qboolean isStatusBar)
 
 
 			//R_DrawScaledPic (scaledHud(640-512), 0, HudScale()*0.5, 1.0, token);
-			R_DrawStretchPic (SCR_ScaledHud(128), 0, SCR_ScaledHud(512), viddef.height, token, 1.0);
+			memset(&ds, 0, sizeof(drawStruct_t));
+			ds.pic = &token[0];
+			ds.x = SCR_ScaledHud(128);
+			ds.y = 0;
+			ds.w = SCR_ScaledHud(128);
+			ds.h = viddef.height;
+			Vector2Copy(vec2_origin, ds.offset);
+			Vector4Copy(vec4_identity, ds.color);
+			R_DrawPic(ds);
+			// R_DrawStretchPic (SCR_ScaledHud(128), 0, SCR_ScaledHud(512), viddef.height, token, 1.0);
 			continue;
 		}
 #endif

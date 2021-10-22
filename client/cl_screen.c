@@ -1892,11 +1892,21 @@ void SCR_DrawCrosshair (void)
 	{
 		int x,y;
 		const char *keymsg;
+		drawStruct_t ds;
 
 		x = scr_vrect.width * 0.035f;
 		y = scr_vrect.height * 0.08f;
 
-		R_DrawStretchPic ((scr_vrect.width * 0.5f)-(x*0.5f), (scr_vrect.height * 0.5f)-(y*0.5f), x, y, "/gfx/m_cur_hover.tga", 1.0);
+		memset(&ds, 0, sizeof(drawStruct_t));
+		ds.pic = "/gfx/m_cur_hover.tga";
+		ds.x = (scr_vrect.width * 0.5f)-(x*0.5f);
+		ds.y = (scr_vrect.height * 0.5f)-(y*0.5f);
+		ds.w = x;
+		ds.h = y;
+		Vector2Copy(vec2_origin, ds.offset);
+		Vector4Copy(vec4_identity, ds.color);
+		R_DrawPic(ds);
+		/*R_DrawStretchPic ((scr_vrect.width * 0.5f)-(x*0.5f), (scr_vrect.height * 0.5f)-(y*0.5f), x, y, "/gfx/m_cur_hover.tga", 1.0);*/
 
 
 		
@@ -2192,6 +2202,8 @@ void SCR_DrawLoading (void)
 #else
 		else if (R_DrawFindPic("/gfx/loadscreen.pcx"))
 		{
+			drawStruct_t ds;
+
 			SCR_DrawFill2 (0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, ALIGN_STRETCH, 255, 255, 255, 255);
 
 			//BC 45PRM LP LOADING SCREEN
@@ -2201,13 +2213,22 @@ void SCR_DrawLoading (void)
 				ALIGN_STRETCH,
 				"/gfx/loadscreen.pcx", 1.0);			*/
 
-			R_DrawStretchPic (
+			memset(&ds, 0, sizeof(drawStruct_t));
+			ds.pic = "/gfx/loadscreen.pcx";
+			ds.x = (viddef.width / 2) - (viddef.height/2);
+			ds.y = 0;
+			ds.w = viddef.height;
+			ds.h = viddef.height;
+			Vector2Copy(vec2_origin, ds.offset);
+			Vector4Copy(vec4_identity, ds.color);
+			R_DrawPic(ds);
+			/*R_DrawStretchPic (
 				(viddef.width / 2) - (viddef.height/2),
 				0,
 				viddef.height,
 				viddef.height,
 				"/gfx/loadscreen.pcx",
-				1.0);
+				1.0);*/
 
 
 			SCR_DrawPic (0, 0,

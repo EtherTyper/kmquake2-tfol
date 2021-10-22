@@ -810,7 +810,7 @@ void checkbox_DoSlide( menulist_s *s, int dir )
 
 void checkbox_Draw( menulist_s *s  )
 {
-	int alpha = mouseOverAlpha(&s->generic);	
+	int alpha = UI_MouseOverAlpha(&s->generic);	
 	char buffer[100];
 
 	if ( s->generic.name )
@@ -843,28 +843,40 @@ void checkbox_Draw( menulist_s *s  )
 	if (buffer)
 	{
 		int yoffset=0;
+		drawStruct_t ds;
 
 		if (viddef.height==1024)
 		{
 			yoffset = MENU_FONT_SIZE*2;
 		}
 
+		memset(&ds, 0, sizeof(drawStruct_t));
+		ds.pic = buffer;
 		if (s->generic.flags & QMF_LEFT_JUSTIFY)
 		{
-			R_DrawStretchPic (
+			ds.x = (viddef.width / 2) + SCR_ScaledScreen(-38);
+			/*R_DrawStretchPic (
 				(viddef.width / 2) + SCR_ScaledScreen(-38),
 				SCR_ScaledScreen(s->generic.y + s->generic.parent->y+yoffset),
 				SCR_ScaledScreen(MENU_FONT_SIZE), SCR_ScaledScreen(MENU_FONT_SIZE), buffer,
-				alpha / 255.0);
+				alpha / 255.0);*/
 		}
 		else
 		{
-			R_DrawStretchPic (
+			ds.x = (viddef.width / 2) + SCR_ScaledScreen(24);
+			/*R_DrawStretchPic (
 				(viddef.width / 2) + SCR_ScaledScreen(24),
 				SCR_ScaledScreen(s->generic.y + s->generic.parent->y+yoffset),
 				SCR_ScaledScreen(MENU_FONT_SIZE), SCR_ScaledScreen(MENU_FONT_SIZE), buffer,
-				alpha / 255.0);
+				alpha / 255.0);*/
 		}
+		ds.y = SCR_ScaledScreen(s->generic.y + s->generic.parent->y+yoffset);
+		ds.w = SCR_ScaledScreen(MENU_FONT_SIZE);
+		ds.h = SCR_ScaledScreen(MENU_FONT_SIZE);
+		Vector2Copy(vec2_origin, ds.offset);
+		Vector4Copy(vec4_identity, ds.color);
+		ds.color[3] = alpha / 255.0;
+		R_DrawPic(ds);
 	}
 
 
