@@ -330,16 +330,6 @@ void CL_ExecuteLayoutString (char *s, qboolean isStatusBar)
 		cs_images = CS_IMAGES;
 		max_images = MAX_IMAGES;
 	}
-
-	// Get our scaling functions
-	if (isStatusBar) {
-		scaleForScreen = SCR_ScaledHud;
-		getScreenScale = SCR_GetHudScale;
-	}
-	else {
-		scaleForScreen = SCR_ScaledScreen;
-		getScreenScale = SCR_GetScreenScale;
-	}
 #else
 	//FULLSCREEN VIGNETTE EFFECT
 	memset(&ds, 0, sizeof(drawStruct_t));
@@ -629,6 +619,16 @@ void CL_ExecuteLayoutString (char *s, qboolean isStatusBar)
 		}
 	}
 #endif
+
+	// Get our scaling functions
+	if (isStatusBar) {
+		scaleForScreen = SCR_ScaledHud;
+		getScreenScale = SCR_GetHudScale;
+	}
+	else {
+		scaleForScreen = SCR_ScaledScreen;
+		getScreenScale = SCR_GetScreenScale;
+	}
 
 	SCR_InitHudScale ();
 	x = 0;
