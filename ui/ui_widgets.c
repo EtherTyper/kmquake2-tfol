@@ -818,13 +818,16 @@ void checkbox_Draw( menulist_s *s  )
 
 		if (s->generic.flags & QMF_LEFT_JUSTIFY)
 		{
-			Menu_DrawString (s->generic.x + s->generic.parent->x + LCOLUMN_OFFSET + 13,
-							s->generic.y + s->generic.parent->y, s->generic.name, alpha);
+			UI_DrawString (s->generic.x + s->generic.parent->x + LCOLUMN_OFFSET + 13,
+							s->generic.y + s->generic.parent->y,
+							MENU_FONT_SIZE,
+							s->generic.name, alpha);
 		}
 		else
 		{
-			Menu_DrawStringR2LDark (s->generic.x + s->generic.parent->x + LCOLUMN_OFFSET,
+			UI_DrawStringR2LDark (s->generic.x + s->generic.parent->x + LCOLUMN_OFFSET,
 				s->generic.y + s->generic.parent->y,
+				MENU_FONT_SIZE,
 				s->generic.name,
 				alpha);
 		}
@@ -849,17 +852,17 @@ void checkbox_Draw( menulist_s *s  )
 		if (s->generic.flags & QMF_LEFT_JUSTIFY)
 		{
 			R_DrawStretchPic (
-				(viddef.width / 2) + SCR_ScaledVideo(-38),
-				SCR_ScaledVideo(s->generic.y + s->generic.parent->y+yoffset),
-				SCR_ScaledVideo(MENU_FONT_SIZE), SCR_ScaledVideo(MENU_FONT_SIZE), buffer,
+				(viddef.width / 2) + SCR_ScaledScreen(-38),
+				SCR_ScaledScreen(s->generic.y + s->generic.parent->y+yoffset),
+				SCR_ScaledScreen(MENU_FONT_SIZE), SCR_ScaledScreen(MENU_FONT_SIZE), buffer,
 				alpha / 255.0);
 		}
 		else
 		{
 			R_DrawStretchPic (
-				(viddef.width / 2) + SCR_ScaledVideo(24),
-				SCR_ScaledVideo(s->generic.y + s->generic.parent->y+yoffset),
-				SCR_ScaledVideo(MENU_FONT_SIZE), SCR_ScaledVideo(MENU_FONT_SIZE), buffer,
+				(viddef.width / 2) + SCR_ScaledScreen(24),
+				SCR_ScaledScreen(s->generic.y + s->generic.parent->y+yoffset),
+				SCR_ScaledScreen(MENU_FONT_SIZE), SCR_ScaledScreen(MENU_FONT_SIZE), buffer,
 				alpha / 255.0);
 		}
 	}

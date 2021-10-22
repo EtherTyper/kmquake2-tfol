@@ -648,13 +648,13 @@ const char *UI_DefaultMenuKey (menuframework_s *m, int key)
 			if ( item->type == MTYPE_CHECKBOX )
 			{
 				
-				Menu_SlideItem( m, 1 );
+				UI_SlideMenuItem( m, 1 );
 				sound = menu_click;
 			}
 			else 
 			{
 				
-				Menu_SelectItem( m );
+				UI_SelectMenuItem( m );
 
 				if ( item->type == MTYPE_ACTION )
 					sound = ui_menu_move_sound;

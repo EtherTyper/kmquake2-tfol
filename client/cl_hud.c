@@ -368,7 +368,7 @@ void CL_ExecuteLayoutString (char *s, qboolean isStatusBar)
 
 		if (Q_stricmp( mapfile, "parlo1") == 0) //name of GB map.
 		{
-			R_DrawScaledPic (viddef.width/2 - scaledHud(180), viddef.height/2 - scaledHud(45), HudScale() * 0.7, value * 0.01, "hint_title");	//GB image
+			R_DrawScaledPic (viddef.width/2 - SCR_ScaledHud(180), viddef.height/2 - SCR_ScaledHud(45), SCR_GetHudScale() * 0.7, value * 0.01, "hint_title");	//GB image
 		}
 		else
 		{
@@ -421,9 +421,9 @@ void CL_ExecuteLayoutString (char *s, qboolean isStatusBar)
 
 
 			R_DrawScaledPic (
-				viddef.width/2 - scaledHud(240),
-				viddef.height/2 - scaledHud(16),
-				HudScale() * 0.5,
+				viddef.width/2 - SCR_ScaledHud(240),
+				viddef.height/2 - SCR_ScaledHud(16),
+				SCR_GetHudScale() * 0.5,
 				1.0,
 				"contractcomplete");
 
@@ -431,9 +431,9 @@ void CL_ExecuteLayoutString (char *s, qboolean isStatusBar)
 	else if (value == 2)
 	{
 		R_DrawScaledPic (
-			scaledHud(1),
-			viddef.height - scaledHud(64),
-			HudScale() * 0.35,
+			SCR_ScaledHud(1),
+			viddef.height - SCR_ScaledHud(64),
+			SCR_GetHudScale() * 0.35,
 			1.0,
 			"find_exit");
 	}
@@ -441,9 +441,9 @@ void CL_ExecuteLayoutString (char *s, qboolean isStatusBar)
 	{
 		//TFOL "the end"
 		R_DrawScaledPic (
-			viddef.width - scaledHud(128),
-			viddef.height - scaledHud(128),
-			HudScale() * 0.8,
+			viddef.width - SCR_ScaledHud(128),
+			viddef.height - SCR_ScaledHud(128),
+			SCR_GetHudScale() * 0.8,
 			1.0,
 			"drunk");
 	}
@@ -474,7 +474,7 @@ void CL_ExecuteLayoutString (char *s, qboolean isStatusBar)
 				sprintf(pcount, "%d of %d Photos", cl.frame.playerstate.stats[STAT_PHOTOCOUNT], cl.frame.playerstate.stats[STAT_MAXPHOTOS]);
 
 				//cl.frame.playerstate.stats[STAT_PHOTOCOUNT]
-				Hud_DrawString (scaledHud(270), scaledHud(465), pcount, 255, false);
+				Hud_DrawString (SCR_ScaledHud(270), SCR_ScaledHud(465), pcount, 255, false);
 			}
 		}
 	}
@@ -562,30 +562,30 @@ void CL_ExecuteLayoutString (char *s, qboolean isStatusBar)
 				if (i!=selected)
 				{
 					R_DrawScaledPic (
-						scaledHud(560),
-						scaledHud(-560+(64*i)),
-						HudScale() * 0.45,
+						SCR_ScaledHud(560),
+						SCR_ScaledHud(-560+(64*i)),
+						SCR_GetHudScale() * 0.45,
 						boxalpha, "w_box");
 				}
 				else
 				{
 					R_DrawScaledPic (
-						scaledHud(560),
-						scaledHud(-560+(64*i)),
-						HudScale() * 0.45,
+						SCR_ScaledHud(560),
+						SCR_ScaledHud(-560+(64*i)),
+						SCR_GetHudScale() * 0.45,
 						boxalpha, "w_box_sel");
 				}
 
 				R_DrawScaledPic (
-					scaledHud(560),
-					scaledHud(-560+(64*i)),
-					HudScale() * 0.45,
+					SCR_ScaledHud(560),
+					SCR_ScaledHud(-560+(64*i)),
+					SCR_GetHudScale() * 0.45,
 					alpha, picname);
 
 				//draw number.
 				Hud_DrawString (
-					scaledHud(607),
-					scaledHud(-535+(64*i)),
+					SCR_ScaledHud(607),
+					SCR_ScaledHud(-535+(64*i)),
 					num,
 					alph,
 					false);
@@ -596,9 +596,9 @@ void CL_ExecuteLayoutString (char *s, qboolean isStatusBar)
 				sprintf(picname, "%s%s", picname,"_name");
 
 				R_DrawScaledPic (
-					scaledHud(500),
-					scaledHud(-560+(64*i)),
-					HudScale() * 0.45,
+					SCR_ScaledHud(500),
+					SCR_ScaledHud(-560+(64*i)),
+					SCR_GetHudScale() * 0.45,
 					alpha, picname);
 			}
 		}
@@ -812,7 +812,7 @@ void CL_ExecuteLayoutString (char *s, qboolean isStatusBar)
 
 
 			//R_DrawScaledPic (scaledHud(640-512), 0, HudScale()*0.5, 1.0, token);
-			R_DrawStretchPic (scaledHud(128), 0, scaledHud(512), viddef.height, token, 1.0);
+			R_DrawStretchPic (SCR_ScaledHud(128), 0, SCR_ScaledHud(512), viddef.height, token, 1.0);
 			continue;
 		}
 #endif

@@ -180,7 +180,14 @@ void Menu_Options_Draw (void)
 	UI_DrawMenu (&s_options_menu);
 
 #ifndef NOTTHIRTYFLIGHTS
-	citem = Menu_ItemAtCursor( &s_options_menu );
+	if (s_options_menu.cursor < 0 || s_options_menu.cursor >= s_options_menu.nitems)
+	{
+		citem = NULL;
+	}
+	else
+	{
+		citem = s_options_menu.items[s_options_menu.cursor];
+	}
 	if ( citem )
 	{
 		char	name[16];

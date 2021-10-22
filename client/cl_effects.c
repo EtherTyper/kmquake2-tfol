@@ -1143,7 +1143,7 @@ void CL_ParticleFreonDecal (vec3_t org, vec3_t dir, float size, int red, int gre
 		return;
 
 	VectorNegate(tr.plane.normal, angle);
-	vectoanglerolled(angle, rand()%360, ang);
+	VecToAngleRolled(angle, rand()%360, ang);
 	VectorCopy(tr.endpos, origin);
 
 	p = CL_SetupParticle (
@@ -1417,7 +1417,7 @@ void CL_ParticleBlasterThink (cparticle_t *p, vec3_t org, vec3_t angle, float *a
 }
 
 
-void pLobbyGlassThink (cparticle_t *p, vec3_t org, vec3_t angle, float *alpha, float *size, int *image, float time)
+void pLobbyGlassThink (cparticle_t *p, vec3_t org, vec3_t angle, float *alpha, float *size, int *image, float *time)
 {
 	vec_t  length;
 	vec3_t len;
@@ -1425,14 +1425,14 @@ void pLobbyGlassThink (cparticle_t *p, vec3_t org, vec3_t angle, float *alpha, f
 	VectorSubtract(p->angle, org, len);
 
 	*size *= (float)(10/VectorLength(len)) * 1.0/((4-*size));
-	*size += time * p->sizevel;
+	*size += *time * p->sizevel;
 
 	if (*size > 10)
 		*size = 10;
 	if (*size < 3)
 		*size = 3;
 
-	pBounceThink (p, org, angle, alpha, &clipsize, image, time); // was size
+	CL_ParticleBounceThink (p, org, angle, alpha, &clipsize, image, time); // was size
 
 	length = VectorNormalize(p->vel);
 	if (length>256)
@@ -1457,7 +1457,7 @@ void pFreonThink (cparticle_t *p, vec3_t org, vec3_t angle, float *alpha, float 
 	if (*size < pBlasterMinSize)
 		*size = pBlasterMinSize;
 
-	pBounceThink (p, org, angle, alpha, &clipsize, image, time); // was size
+	CL_ParticleBounceThink (p, org, angle, alpha, &clipsize, image, time); // was size
 
 	length = VectorNormalize(p->vel);
 	if (length>pBlasterMaxVelocity)
@@ -2391,7 +2391,7 @@ void CL_FreonTrail (vec3_t start, vec3_t end, int red, int green, int blue,
 	{
 		len -= dec;
 
-		setupParticle (
+		CL_SetupParticle (
 			0,		0,		0,
 			
 

@@ -140,9 +140,8 @@ void Menu_Credits_Draw (void)
 	int leftMargin = 20;
 	int leftIndent = 30;
 
+	#define Menu_DrawString(a, b, c, d) UI_DrawString(a, b, MENU_FONT_SIZE, c, d)
 
-
-	
 	Menu_DrawString( leftMargin,  15, "^0Blendo Games presents", 255);
 	Menu_DrawString( leftMargin + 175,  15, "CITIZEN ABEL: ^9THIRTY FLIGHTS OF LOVING", 255);
 
@@ -205,14 +204,7 @@ void Menu_Credits_Draw (void)
 
 	Menu_DrawString(leftIndent , 430, "^7Corwin Light-Williams", 255);
 
-	
-
-	
-
-
-	
-	
-
+	#undef Menu_DrawString
 
 	return;
 	//Com_Printf("credits\n");

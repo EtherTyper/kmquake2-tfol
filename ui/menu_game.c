@@ -86,7 +86,7 @@ static void MediumGameFunc( void *data )
 {
 	Cvar_ForceSet( "commentary", "0" );
 	Cvar_ForceSet( "skill", "1" );
-	StartGame();
+	UIStartSPGame();
 }
 
 static void GravityboneFunc( void *data )
@@ -113,7 +113,7 @@ static void CommentaryFunc( void *data )
 {
 	Cvar_ForceSet( "skill", "1" );
 	Cvar_ForceSet( "commentary", "1" );
-	StartGame();
+	UIStartSPGame();
 }
 
 static void IdleGameFunc( void *data )
@@ -327,7 +327,14 @@ void Menu_Game_Draw (void)
 	UI_AdjustMenuCursor (&s_game_menu, 1);
 	UI_DrawMenu (&s_game_menu);
 #ifndef NOTTHIRTYFLIGHTS
-	citem = Menu_ItemAtCursor( &s_game_menu );	
+	if (s_game_menu.cursor < 0 || s_game_menu.cursor >= s_game_menu.nitems)
+	{
+		citem = NULL;
+	}
+	else
+	{
+		citem = s_game_menu.items[s_game_menu.cursor];
+	}
 	if ( citem )
 	{
 		char	name[16];

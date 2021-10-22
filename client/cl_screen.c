@@ -1933,17 +1933,25 @@ void SCR_DrawCrosshair (void)
 			{
 				Com_sprintf (keymsg, sizeof(keymsg), "E");
 
-				Menu_DrawString(
+				SCR_DrawString(
 					318,
-					257, 
-					keymsg, 255);
+					257,
+					MENU_FONT_SIZE,
+					ALIGN_CENTER,
+					keymsg,
+					FONT_SCREEN,
+					255);
 			}
 			else
 			{
-				Menu_DrawString(
+				SCR_DrawString(
 					318,
-					257, 
-					keymsg, 255);
+					257,
+					MENU_FONT_SIZE,
+					ALIGN_CENTER,
+					keymsg,
+					FONT_SCREEN,
+					255);
 			}
 
 		}

@@ -331,12 +331,12 @@ void UI_Mouseover_Check (menuframework_s *menu)
 						//mouseover detection.
 						if (item->flags & QMF_LEFT_JUSTIFY)
 						{
-							min[0] += SCR_ScaledVideo(LCOLUMN_OFFSET*2);
+							min[0] += SCR_ScaledScreen(LCOLUMN_OFFSET*2);
 
 							if (item->name)
 							{
 								len = strlen(item->name);
-								max[0] += SCR_ScaledVideo(len*MENU_FONT_SIZE);
+								max[0] += SCR_ScaledScreen(len*MENU_FONT_SIZE);
 							}
 						}
 						else
@@ -344,11 +344,11 @@ void UI_Mouseover_Check (menuframework_s *menu)
 							if (item->name)
 							{
 								len = strlen(item->name);
-								min[0] -= SCR_ScaledVideo(len*MENU_FONT_SIZE - LCOLUMN_OFFSET*2);
+								min[0] -= SCR_ScaledScreen(len*MENU_FONT_SIZE - LCOLUMN_OFFSET*2);
 							}
 
 							len = strlen(spin->itemNames[spin->curValue]);
-							max[0] += SCR_ScaledVideo(len*MENU_FONT_SIZE);
+							max[0] += SCR_ScaledScreen(len*MENU_FONT_SIZE);
 						}
 
 						type = MENUITEM_ROTATE;

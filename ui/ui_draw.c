@@ -258,7 +258,7 @@ void UI_Draw_Cursor (void)
 #elif 1
 void UI_Draw_Cursor (void)
 {
-	float alpha = 1, scale = SCR_ScaledVideo(1)*0.5;
+	float alpha = 1, scale = SCR_ScaledScreen(1)*0.5;
 	int w,h;
 	char *overlay = NULL;
 	char *cur_img = NULL;
